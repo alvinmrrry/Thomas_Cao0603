@@ -15,4 +15,4 @@ headers = {
 
 response = requests.request("POST", url, headers=headers, data=payload)
 
-st.write(response)
+st.write(response.text)
