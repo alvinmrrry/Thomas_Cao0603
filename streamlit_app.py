@@ -58,10 +58,6 @@ if response:
                 content=system_prompt
             ),  # This is the persistent system prompt that is always included at the start of the chat.
 
-            MessagesPlaceholder(
-                variable_name="chat_history"
-            ),  # This placeholder will be replaced by the actual chat history during the conversation. It helps in maintaining context.
-
             HumanMessagePromptTemplate.from_template(
                 "{human_input}"
             ),  # This template is where the user's current input will be injected into the prompt.
