@@ -22,7 +22,7 @@ if st.button("Start Streng"):
             st.write(piece)
 
 # write a st checkbox
-if st.checkbox("Check me"):
+if st.checkbox("Check me！"):
     st.write("Checkbox is checked!")
 else:
     st.write("Checkbox is unchecked!")
