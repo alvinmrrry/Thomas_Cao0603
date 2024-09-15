@@ -24,4 +24,4 @@ if st.button("Start Streng"):
 # 创建一个简单的下拉框
 option = st.selectbox('choose:',['红色', '绿色', '蓝色'])
 
-st.write('你选择:', option)
+st.write(option)
