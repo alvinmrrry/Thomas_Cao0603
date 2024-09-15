@@ -50,7 +50,7 @@ if query:
 
     # st.write(response.text)
 
-if response.text and response:
+if response:
     # Construct a chat prompt template using various components
     prompt = ChatPromptTemplate.from_messages(
         [
