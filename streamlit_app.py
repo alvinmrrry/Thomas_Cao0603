@@ -3,10 +3,10 @@ import time
 
 with st.sidebar:
     st.write("Streamlit Write Streaample")
+    if st.button('Click me'):
+        st.write('Button clicked!')
 
 st.title("Streamlit Write Stream Example")
-
-
 
 # Stream data generation
 def generate_data():
