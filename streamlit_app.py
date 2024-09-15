@@ -1,4 +1,5 @@
 import requests  # 添加请求库
+import streamlit as st
 
 # 使用请求从网络获取数据
 try:
