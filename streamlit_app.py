@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 with st.sidebar:
-    st.write("Streamlit Write Stream Example")
+    st.write("Streamlit Write Streaample")
 
 st.title("Streamlit Write Stream Example")
 
