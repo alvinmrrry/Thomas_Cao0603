@@ -3,3 +3,4 @@ groq
 langchain
 langchain_groq
 google-search-results
+langchain_community
