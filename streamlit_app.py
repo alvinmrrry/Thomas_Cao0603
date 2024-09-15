@@ -4,7 +4,7 @@ import time
 with st.sidebar:
     st.write("Streamlit Write Streaample")
     if st.button('Click me'):
-        st.write('Button clicked!')
+        st.button('Button clicked!')
 
 st.title("Streamlit Write Stream Example")
 
