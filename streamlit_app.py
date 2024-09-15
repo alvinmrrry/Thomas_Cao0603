@@ -6,7 +6,8 @@ from langchain_core.prompts import (
 )
 from langchain_core.messages import SystemMessage
 from langchain_groq import ChatGroq
-from langchain.search import SerperSearch
+import requests
+import json
 
 
 # Serper API Key
@@ -27,16 +28,24 @@ def main():
 
     groq_chat = ChatGroq(groq_api_key=groq_api_key, model_name=model)
 
-    # Initialize Serper Search
-    serper_search = SerperSearch(api_key=serper_api_key)
-
     query = st.text_input('Please input the query:')
 
     if query:
         # Perform search using Serper
-        search_results = serper_search.search(query)
+        url = "https://google.serper.dev/search"
+        payload = json.dumps({
+            "q": query
+        })
+
+        headers = {
+            'X-API-KEY': serper_api_key,
+            'Content-Type': 'application/json'
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
 
         # Combine search results into a single string
+        search_results = response.json()
         search_results_text = " ".join([result["title"] + ". " + result["snippet"] for result in search_results])
 
         # Construct a chat prompt template using various components
