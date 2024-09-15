@@ -23,7 +23,7 @@ if st.button("Start Streng"):
             st.write(piece)
 
 # 创建一个简单的下拉框
-option = st.selectbox('选择颜色:', ['', '.columns', '.info()', '蓝色'])  # Changed 'choose:' to '选择:'
+option = st.selectbox('选择颜色:', ['', 'coloums', 'info', '蓝色'])  # Changed 'choose:' to '选择:'
 st.write(option)
 
 # 展示数据框
