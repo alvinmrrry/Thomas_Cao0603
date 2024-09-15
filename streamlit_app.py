@@ -8,7 +8,7 @@ groq_api_key = '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'
 SERPAPI_API_KEY = '2203d27aa32a1d92275134fb632bf009714b2476'
 
 tools = load_tools(["serpapi"])
-serpapi_wrapper = SerpAPIWrapper(api_key=SERPAPI_API_KEY)
+serpapi_wrapper = SerpAPIWrapper(SERPAPI_API_KEY=SERPAPI_API_KEY)
 
 # Function to search using SerpAPI
 def search(query):
@@ -18,4 +18,4 @@ def search(query):
 # Example usage
 query = "What is the latest news in AI?"
 search_results = search(query)
-print(search_results)
+st.write(search_results)
