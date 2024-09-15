@@ -1,36 +1,8 @@
-import streamlit as st
-import time
-import pandas as pd
+import requests  # 添加请求库
 
-with st.sidebar:
-    st.write("Streamlit Write Streaample")
-    if st.button('Click me'):
-        st.button('Button clicked!')
+# 使用请求从网络获取数据
+response = requests.get('https://api.example.com/data')  # 替换为实际的API URL
+data = response.json()  # 假设返回的是JSON格式的数据
 
-st.title("Streamlit Write Stream Example")
-
-# Stream data generation
-def generate_data():
-    for i in range(10):
-        yield f"Stream data point: {i}"
-        time.sleep(1)  # Simulating delay for streaming
-
-
-# Using the st.write_stream function
-if st.button("Start Streng"):
-    with st.empty():  # Creates an empty container
-        for piece in generate_data():
-            st.write(piece)
-
-# 创建一个简单的下拉框
-option = st.selectbox('选择颜色:', ['', 'A', 'B', '蓝色'])  # Changed 'choose:' to '选择:'
-st.write(option)
-
-# 展示数据框
-df = pd.DataFrame({
-    '数字': [1, 2, 3, 4],
-    '字母': ['A', 'B', 'C', 'D']
-})
-# st.write(df)
-if option:
-    st.write(df[df['字母'] == option])
+# 打印获取的数据
+st.write(data)  # 使用Streamlit打印内容
