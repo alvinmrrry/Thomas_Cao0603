@@ -15,5 +15,4 @@ headers = {
 
 response = requests.request("POST", url, headers=headers, data=payload)
 
-st.markdown("### Response Content:")
-st.markdown(f"```json\n{response.text}\n```")  # 使用Markdown格式展示完整内容
+st.write(response.text.format)
