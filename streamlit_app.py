@@ -2,13 +2,15 @@ import streamlit as st
 from langchain import agents
 from langchain_community.utilities import SerpAPIWrapper
 
-SERPAPI_API_KEY = '2203d27aa32a1d92275134fb632bf009714b2476'
+# Set the SERPAPI_API_KEY as an environment variable
+import os
+os.environ['SERPAPI_API_KEY'] = '2203d27aa32a1d92275134fb632bf009714b2476'
 
 # Load tools
 tools = agents.load_tools(["serpapi"])
 
 # Initialize SerpAPI wrapper
-serpapi_wrapper = SerpAPIWrapper(serpapi_api_key=SERPAPI_API_KEY)
+serpapi_wrapper = SerpAPIWrapper()
 
 # Function to search using SerpAPI
 def search(query):
