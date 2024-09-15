@@ -33,4 +33,4 @@ df = pd.DataFrame({
 })
 st.write(df)
 if option:
-    st.write('df.option')
+    st.write(df.option)
