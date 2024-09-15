@@ -10,7 +10,7 @@ def generate_data():
         time.sleep(1)  # Simulating delay for streaming
 
 # Using the st.write_stream function
-if st.button("Start Streaming"):
+if st.button("Start Streng"):
     with st.empty():  # Creates an empty container
         for piece in generate_data():
             st.write(piece)
