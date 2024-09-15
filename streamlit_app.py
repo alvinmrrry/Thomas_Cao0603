@@ -20,3 +20,9 @@ if st.button("Start Streng"):
     with st.empty():  # Creates an empty container
         for piece in generate_data():
             st.write(piece)
+
+# write a st checkbox
+if st.checkbox("Check me"):
+    st.write("Checkbox is checked!")
+else:
+    st.write("Checkbox is unchecked!")
