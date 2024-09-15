@@ -2,3 +2,4 @@ streamlit
 groq
 langchain
 langchain_groq
+google-search-results
