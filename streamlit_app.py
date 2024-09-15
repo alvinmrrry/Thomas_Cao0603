@@ -24,5 +24,5 @@ def generate_data():
 # Using the st.write_stream function
 if st.button("Start Streng"):
     with st.empty():  # Creates an empty container
-        for piece in generate_data():
-            st.write(piece)
+        # for piece in generate_data():
+        #     st.write(piece)
