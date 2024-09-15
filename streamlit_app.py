@@ -5,8 +5,10 @@ import streamlit as st
 # 使用请求从网络获取数据 2203d27aa32a1d92275134fb632bf009714b2476
 url = "https://google.serper.dev/search"
 
+
+
 payload = json.dumps({
-  "q": "apple inc"
+  "q": st.text_input('Please input the query:')
 })
 headers = {
   'X-API-KEY': '2203d27aa32a1d92275134fb632bf009714b2476',
