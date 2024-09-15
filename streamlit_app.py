@@ -46,7 +46,10 @@ def main():
 
         # Combine search results into a single string
         search_results = response.json()
-        search_results_text = " ".join([result["title"] + ". " + result["snippet"] for result in search_results])
+        try:
+            search_results_text = " ".join([f"{result['title']}. {result['snippet']}" for result in search_results])
+        except KeyError as e:
+            print(f"Error: Missing key '{e}' in search results.")
 
         # Construct a chat prompt template using various components
         prompt = ChatPromptTemplate.from_messages(
