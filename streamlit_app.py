@@ -1,9 +1,11 @@
 import streamlit as st
 import time
 
+st.sidebar("Streamlit Write Stream Example")
+
 st.title("Streamlit Write Stream Example")
 
-st.sidebar("Streamlit Write Stream Example")
+
 
 # Stream data generation
 def generate_data():
