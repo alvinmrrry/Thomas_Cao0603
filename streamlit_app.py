@@ -4,7 +4,7 @@ from langchain_community.utilities import SerpAPIWrapper
 
 # Set the SERPAPI_API_KEY as an environment variable
 import os
-os.environ['SERPAPI_API_KEY'] = '2203d27aa32a1d92275134fb632bf009714b2476'
+os.environ['SERPAPI_API_KEY'] = 'a4a2ff56f44eb5b47674a37a1ba7399b0a4d6a2df3dc9bc9a1ed370552a5572c'
 
 # Load tools
 tools = agents.load_tools(["serpapi"])
