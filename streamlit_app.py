@@ -5,11 +5,10 @@ from langchain.chains import LLMChain
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain_core.messages import SystemMessage
 from langchain_groq import ChatGroq
+from config import groq_api_key, search_api_key
 
 # Configuration
-groq_api_key = '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'
 search_api_url = "https://google.serper.dev/search"
-search_api_key = '2203d27aa32a1d92275134fb632bf009714b2476'
 
 def get_search_results(query):
     """Make a POST request to the search API with the query."""
