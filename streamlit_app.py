@@ -23,7 +23,7 @@ if st.button("Start Streng"):
             st.write(piece)
 
 # 创建一个简单的下拉框
-option = st.selectbox('选择颜色:', ['', '红色', '绿色', '蓝色'])  # Changed 'choose:' to '选择:'
+option = st.selectbox('选择颜色:', ['', '.columns', '.info()', '蓝色'])  # Changed 'choose:' to '选择:'
 st.write(option)
 
 # 展示数据框
@@ -32,3 +32,5 @@ df = pd.DataFrame({
     '字母': ['A', 'B', 'C', 'D']
 })
 st.write(df)
+if option:
+    st.write('df.option')
