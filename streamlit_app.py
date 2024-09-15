@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+import pandas as pd
 
 with st.sidebar:
     st.write("Streamlit Write Streaample")
@@ -24,3 +25,10 @@ if st.button("Start Streng"):
 # 创建一个简单的下拉框
 option = st.selectbox('选择颜色:', ['', '红色', '绿色', '蓝色'])  # Changed 'choose:' to '选择:'
 st.write(option)
+
+# 展示数据框
+df = pd.DataFrame({
+    '数字': [1, 2, 3, 4],
+    '字母': ['A', 'B', 'C', 'D']
+})
+st.write(df)
