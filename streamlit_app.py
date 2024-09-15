@@ -26,3 +26,8 @@ if st.checkbox("Check me！"):
     st.write("Checkbox is checked!")
 else:
     st.write("Checkbox is unchecked!")
+
+# st.text_input("Enter some text:")
+input_text = st.text_input("Enter some text:")
+if input_text:  # Check if input_text is not empty
+    st.write(input_text)
