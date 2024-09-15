@@ -21,13 +21,9 @@ if st.button("Start Streng"):
         for piece in generate_data():
             st.write(piece)
 
-# write a st checkbox
-if st.checkbox("Check me！"):
-    st.write("Checkbox is checked!")
-else:
-    st.write("Checkbox is unchecked!")
+# 创建一个简单的下拉框
+option = st.selectbox(
+    '选择你喜欢的颜色',
+    ['红色', '绿色', '蓝色'])
 
-# st.text_input("Enter some text:")
-input_text = st.text_input("Enter some text:")
-if input_text:  # Check if input_text is not empty
-    st.write(input_text)
+st.write('你选择了:', option)
