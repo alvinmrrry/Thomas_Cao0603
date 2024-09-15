@@ -1,8 +1,8 @@
 import streamlit as st
 import time
 
-with st.sidebar:
-    st.write("Streamlit Write Stream Example")
+with st.sidebar():
+    st.write('asdfasfsafd')
 
 st.title("Streamlit Write Stream Example")
 
@@ -25,4 +25,4 @@ def generate_data():
 if st.button("Start Streng"):
     with st.empty():  # Creates an empty container
         for piece in generate_data():
-        #     st.write(piece)
+            st.write(piece)
