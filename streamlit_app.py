@@ -23,7 +23,7 @@ def image_to_text(client, model, base64_image,prompt):
         model=model,
         messages=[
             {"role": "system", "content": prompt},
-            {"role": "user", "content": base64_image},
+            {"role": "user", "content": {base64_image}},
         ],
         max_tokens=2048
     )
