@@ -3,7 +3,7 @@ from groq import Groq
 from config import groq_api_key
 import base64
 
-client = Groq(api_key=groq_api_key) 
+client = Groq() 
 
 # llama_model = 'llama-3.1-70b-versatile'
 llava_model = 'llava-v1.5-7b-4096-preview'
