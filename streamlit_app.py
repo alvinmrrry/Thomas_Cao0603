@@ -1,9 +1,9 @@
-from groq import groq
+from groq import Groq
 from config import groq_api_key
 import streamlit as st
 import base64
 
-client = groq(api_key=groq_api_key)
+client = Groq(api_key=groq_api_key)
 
 llava_model='llava-v1.5-7b-4096-preview'
 llama31_model='llama-3.1-70b-versatile'
