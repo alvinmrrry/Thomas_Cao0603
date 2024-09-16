@@ -61,7 +61,7 @@ def image_to_text(client, model, base64_image, prompt):
         )
     except Exception as e:
         raise RuntimeError(f"Error calling Groq API: {e}") from e
-    return chat_completion
+    return chat_completion.choices[0].message.content
 
 prompt = 'Describe the image'
 
