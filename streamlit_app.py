@@ -5,7 +5,8 @@ import base64
 
 client = Groq(api_key=groq_api_key) 
 
-llava_model = 'llama-3.1-70b-versatile'
+llama_model = 'llama-3.1-70b-versatile'
+llava_model = 'llava-v1.5-7b-4096-preview'
 
 # image encoding 
 image_path = 'original.jpg'
