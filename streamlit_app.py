@@ -14,8 +14,7 @@ uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
 
 if uploaded_file is not None:
  # Save the JPG file to a temporary location
-    temp_dir = tempfile.gettempdir()
-    temp_file_path = os.path.join(temp_dir, uploaded_file.name)
+    temp_file_path = os.path.join('.', uploaded_file.name)
     with open(temp_file_path, "wb") as f:
         f.write(uploaded_file.getvalue())
 
