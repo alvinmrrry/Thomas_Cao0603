@@ -32,4 +32,4 @@ def image_to_text(client, model, base64_image,prompt):
 prompt = 'Describe the image'
 
 result = image_to_text(client, llava_model, base64_image, prompt)
-st.write(result)
+st.write('resultasdfsafdasdf')
