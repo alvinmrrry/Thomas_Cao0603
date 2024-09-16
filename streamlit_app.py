@@ -8,7 +8,7 @@ client = Groq(api_key=groq_api_key)
 llava_model = 'llama-3.1-70b-versatile'
 
 # image encoding 
-image_path ='original.jpg'
+image_path = 'original.jpg'
 def encode_image(image_path):
     """Encode an image to base64 format."""
     with open(image_path, "rb") as image_file:
@@ -23,19 +23,14 @@ def image_to_text(client, model, base64_image, prompt):
         messages=[
             {
                 'role': 'user',
-                'content': [
-                    {
-                        'type': 'text',
-                        'text': f"Describe the following image: {base64_image} with prompt: {prompt}"  # {{ edit_2 }}
-                    }
-                ]
+                'content': f"Describe the following image: {base64_image} with prompt: {prompt}"  # Fixed structure
             }
         ]
     )
-    return chat_completion.choices[0].message.content
+    return chat_completion.choices[0].message['content']  # Fixed access to message content
 
 prompt = 'Describe this image'
 
-result = image_to_text(client, llava_model,base64_image, prompt)
+result = image_to_text(client, llava_model, base64_image, prompt)
 
-st.write()
+st.write(result)  # Added result to display the output
