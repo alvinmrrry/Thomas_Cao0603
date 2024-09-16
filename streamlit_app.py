@@ -18,16 +18,31 @@ def encode_image(image_path):
 base64_image = encode_image(image_path)
 
 def image_to_text(client, model, base64_image, prompt):
-    chat_completion = client.chat.completions.create(
-        model=model, 
-        messages=[
-            {
-                'role': 'user',
-                'content': f"Describe the following image: {base64_image} with prompt: {prompt}"  # Fixed structure
-            }
-        ]
-    )
-    return chat_completion.choices[0].message['content']  # Fixed access to message content
+    """
+    Converts an image in base64 format to a descriptive text using a chat completion API.
+    
+    Parameters:
+    - client: The client instance for the chat API.
+    - model: The specific model to use for text generation.
+    - base64_image: The image encoded in base64.
+    - prompt: Additional context for the description.
+    """
+    try:
+        # Create chat completion request
+        chat_completion = client.chat.completions.create(
+            model=model,
+            messages=[
+                {
+                    'role': 'user',
+                    'content': f"Describe the following image: {base64_image} with prompt: {prompt}"
+                }
+            ]
+        )
+        
+        # Return the generated description
+        return chat_completion.choices[0].message['content']
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
 
 prompt = 'Describe this image'
 
