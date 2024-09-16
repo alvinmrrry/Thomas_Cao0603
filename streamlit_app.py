@@ -2,6 +2,7 @@ from groq import Groq
 from config import groq_api_key
 import streamlit as st
 import base64
+import os
 
 client = Groq(api_key=groq_api_key)
 
