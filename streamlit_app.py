@@ -1,55 +1,37 @@
-import requests
-import json
 import streamlit as st
-from langchain.chains import LLMChain
-from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
-from langchain_core.messages import SystemMessage
-from langchain_groq import ChatGroq
-from config import groq_api_key, search_api_key
+from groq import Groq
+from config import groq_api_key
+from your_module import create_conversation_chain  
+import base64
 
-# Configuration
-search_api_url = "https://google.serper.dev/search"
+client = Groq(api_key=groq_api_key) 
 
-def get_search_results(query):
-    """Make a POST request to the search API with the query."""
-    payload = json.dumps({"q": query})
-    headers = {
-        'X-API-KEY': search_api_key,
-        'Content-Type': 'application/json'
-    }
-    try:
-        response = requests.request("POST", search_api_url, headers=headers, data=payload)
-        response.raise_for_status()
-        return response.text
-    except requests.RequestException as e:
-        st.error(f"Error fetching search results: {e}")
-        return None
+llava_model = 'llama-3.1-70b-versatile'
 
-def create_conversation_chain(model_name, system_prompt, human_input):
-    """Create a conversation chain using the LangChain LLM."""
-    groq_chat = ChatGroq(groq_api_key=groq_api_key, model_name=model_name)
-    prompt = ChatPromptTemplate.from_messages([
-        SystemMessage(content=system_prompt),
-        HumanMessagePromptTemplate.from_template("{human_input}"),
-    ])
-    conversation = LLMChain(llm=groq_chat, prompt=prompt, verbose=True)
-    return conversation.predict(human_input=human_input)
+# image encoding 
+def encode_image(image_path):
+    """Encode an image to base64 format."""
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+    return encoded_string
 
-def main():
-    st.sidebar.title('Customization')
-    system_prompt = st.sidebar.text_input("System prompt:")
-    model = st.sidebar.selectbox(
-        'Choose a model',
-        ['llama-3.1-70b-versatile', 'llama-3.1-8b-instant',
-            'llama3-70b-8192', 'llama3-8b-8192']
-    )
+# Example usage     
+image_path = "path/to/your/image.jpg"
+encoded_image = encode_image(image_path)
+st.write(encoded_image)
 
-    query = st.text_input('Please input the query:')
-    if query:
-        search_results = get_search_results(query)
-        if search_results:
-            response = create_conversation_chain(model, system_prompt, search_results)
-            st.write("Chatbot:", response)
+def read_image_content(encoded_image):
+    """Use the LLM to read the content of the image and return the text."""
+    model_name = 'llama-3.1-70b-versatile'  # Specify the model to use
+    system_prompt = "Describe the provided image."
+    
+    # Create a conversation chain with the LLM
+    conversation_chain = create_conversation_chain(model_name, system_prompt, encoded_image)
+    
+    # Get the response from the LLM
+    return conversation_chain
 
-if __name__ == "__main__":
-    main()
+# Use the encoded image to read its content
+if encoded_image:
+    image_text = read_image_content(encoded_image)
+    st.write("Extracted Text from Image:", image_text)
