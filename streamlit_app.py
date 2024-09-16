@@ -8,8 +8,13 @@ client = Groq(api_key=groq_api_key)
 llava_model='llava-v1.5-7b-4096-preview'
 llama31_model='llama-3.1-70b-versatile'
 
+# add a function to upload pictures by streamlit
+st.title('Describe the image')
+uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
+
+
 # image encoding
-image_path = 'original.jpg'
+# image_path = 'original.jpg'
 def encode_image(image_path):
     """
     Encodes an image file into a base64 string.
@@ -32,7 +37,7 @@ def encode_image(image_path):
         raise ValueError(f"An error occurred: {e}") from e
 
 
-base64_image = encode_image(image_path)
+base64_image = encode_image(uploaded_file)
 
 # image to text function
 def image_to_text(client, model, base64_image, prompt):
@@ -63,7 +68,7 @@ def image_to_text(client, model, base64_image, prompt):
         raise RuntimeError(f"Error calling Groq API: {e}") from e
     return chat_completion.choices[0].message.content
 
-prompt = 'Specifically describe the image, and show the code of python to copy it'
+prompt = 'Describe the image'
 
 result = image_to_text(client, llava_model, base64_image, prompt)
 st.write(result)
