@@ -36,8 +36,8 @@ def encode_image(image_path):
     except Exception as e:
         raise ValueError(f"An error occurred: {e}") from e
 
-
-base64_image = encode_image(uploaded_file)
+if uploaded_file:
+    base64_image = encode_image(uploaded_file)
 
 # image to text function
 def image_to_text(client, model, base64_image, prompt):
