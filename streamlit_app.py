@@ -48,6 +48,6 @@ if uploaded_file:
             raise RuntimeError(f"Error calling Groq API: {e}") from e
         return chat_completion.choices[0].message.content
 
-    prompt = 'Describe the image,and then translate this description into chinese'
+    prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
     result = image_to_text(client, llava_model, base64_image, prompt)
     st.write(result)
