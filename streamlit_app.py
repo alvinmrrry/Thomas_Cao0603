@@ -63,7 +63,7 @@ def image_to_text(client, model, base64_image, prompt):
         raise RuntimeError(f"Error calling Groq API: {e}") from e
     return chat_completion.choices[0].message.content
 
-prompt = 'Describe the image'
+prompt = 'Specifically describe the image, and show the code of python to copy it'
 
 result = image_to_text(client, llava_model, base64_image, prompt)
 st.write(result)
