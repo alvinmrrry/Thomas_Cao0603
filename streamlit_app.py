@@ -21,10 +21,8 @@ uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
 if uploaded_file:
     if uploaded_file.type not in ["image/jpeg", "image/jpg"]:
         st.error("Invalid file type. Please upload a JPEG file.")
-        return
     if uploaded_file.size > 10 * 1024 * 1024:  # 10MB
         st.error("File size exceeds 10MB. Please upload a smaller file.")
-        return
 
     # Open the image file
     image = Image.open(uploaded_file)
