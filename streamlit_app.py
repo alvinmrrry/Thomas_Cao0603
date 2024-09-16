@@ -1,7 +1,6 @@
 import streamlit as st
 from groq import Groq
 from config import groq_api_key
-from your_module import create_conversation_chain  
 import base64
 
 client = Groq(api_key=groq_api_key) 
@@ -9,29 +8,34 @@ client = Groq(api_key=groq_api_key)
 llava_model = 'llama-3.1-70b-versatile'
 
 # image encoding 
+image_path ='original.jpg'
 def encode_image(image_path):
     """Encode an image to base64 format."""
     with open(image_path, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
     return encoded_string
 
-# Example usage     
-image_path = "path/to/your/image.jpg"
-encoded_image = encode_image(image_path)
-st.write(encoded_image)
+base64_image = encode_image(image_path)
 
-def read_image_content(encoded_image):
-    """Use the LLM to read the content of the image and return the text."""
-    model_name = 'llama-3.1-70b-versatile'  # Specify the model to use
-    system_prompt = "Describe the provided image."
-    
-    # Create a conversation chain with the LLM
-    conversation_chain = create_conversation_chain(model_name, system_prompt, encoded_image)
-    
-    # Get the response from the LLM
-    return conversation_chain
+def image_to_text(client, model, base64_image, prompt):
+    chat_completion = client.chat.completions.create(
+        model=model, 
+        messages=[
+            {
+                'role': 'user',
+                'content': [
+                    {
+                        'type': 'text',
+                        'text': f"Describe the following image: {base64_image} with prompt: {prompt}"  # {{ edit_2 }}
+                    }
+                ]
+            }
+        ]
+    )
+    return chat_completion.choices[0].message.content
 
-# Use the encoded image to read its content
-if encoded_image:
-    image_text = read_image_content(encoded_image)
-    st.write("Extracted Text from Image:", image_text)
+prompt = 'Describe this image'
+
+result = image_to_text(client, llava_model,base64_image, prompt)
+
+st.write()
