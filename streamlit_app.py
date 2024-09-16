@@ -12,7 +12,7 @@ llama31_model='llama-3.1-70b-versatile'
 image_path = 'original.jpg'
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read())
+        encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
     return encoded_string
 
 base64_image = encode_image(image_path)
