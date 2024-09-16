@@ -8,6 +8,7 @@ import io
 client = Groq(api_key=groq_api_key)
 
 llava_model = 'llava-v1.5-7b-4096-preview'
+llama31_model='llama-3.1-70b-versatile'
 
 st.title('Describe the image')
 uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
@@ -49,5 +50,24 @@ if uploaded_file:
         return chat_completion.choices[0].message.content
 
     prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
-    result = image_to_text(client, llava_model, base64_image, prompt)
-    st.write(result)
+    image_description = image_to_text(client, llava_model, base64_image, prompt)
+    st.write(image_description)
+
+    # short story generation funtion
+    def short_story(client, image_description):
+        chat_completion = client.chat.completions.create(
+            messages = [
+                {"role": "system",
+                "content": "You are a children's book author. Write a short story based on the image description."},
+                {"role": "user",
+                "content": image_description}
+            ],
+            model = llama31_model
+        )
+        
+        return chat_completion.choices[0].message.content
+
+    # signle image processing 
+    short_story = short_story(client, image_description)
+    st.write('Short story:')
+    st.write(short_story)
