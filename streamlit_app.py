@@ -31,44 +31,6 @@ def main():
     page = st.sidebar.selectbox("Page:", options=list(PAGES.keys()))
     PAGES[page]()
 
-    with st.sidebar:
-        st.markdown("---")
-        st.markdown(
-            '<h6>Made in &nbsp<img src="https://streamlit.io/images/brand/streamlit-mark-color.png" alt="Streamlit logo" height="16">&nbsp by <a href="https://twitter.com/andfanilo">@andfanilo</a></h6>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<div style="margin: 0.75em 0;"><a href="https://www.buymeacoffee.com/andfanilo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a></div>',
-            unsafe_allow_html=True,
-        )
-
-
-def about():
-    st.markdown(
-        """
-    Welcome to the demo of [Streamlit Drawable Canvas](https://github.com/andfanilo/streamlit-drawable-canvas).
-    
-    On this site, you will find a full use case for this Streamlit component, and answers to some frequently asked questions.
-    
-    :pencil: [Demo source code](https://github.com/andfanilo/streamlit-drawable-canvas-demo/)    
-    """
-    )
-    st.image("img/demo.gif")
-    st.markdown(
-        """
-    What you can do with Drawable Canvas:
-
-    * Draw freely, lines, circles and boxes on the canvas, with options on stroke & fill
-    * Rotate, skew, scale, move any object of the canvas on demand
-    * Select a background color or image to draw on
-    * Get image data and every drawn object properties back to Streamlit !
-    * Choose to fetch back data in realtime or on demand with a button
-    * Undo, Redo or Drop canvas
-    * Save canvas data as JSON to reuse for another session
-    """
-    )
-
-
 def full_app():
     st.sidebar.header("Configuration")
     st.markdown(
