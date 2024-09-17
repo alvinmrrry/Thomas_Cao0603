@@ -81,14 +81,13 @@ def process_canvas_result(image_data):
 
     # Define image-to-text function
     def image_to_text(client, model, base64_image, prompt):
-        try:
-            chat_completion = client.chat.completions.create(
-                messages=[
-                    {"role": "user",
-                    "content": [
-                        {"type": "text", "text": prompt},
-                        {"type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpg;base64,{base64_image}",
-                        }}}
-                    ]])
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpg;base64,{base64_image}",
+                    }}]}
+                ])
