@@ -4,6 +4,8 @@ import streamlit as st
 from PIL import Image
 from streamlit_drawable_canvas import st_canvas
 from groq import Groq
+from PIL import Image
+import io
 
 def main():
     if "button_id" not in st.session_state:
@@ -72,12 +74,15 @@ def do_something(canvas_result):
 
     client = Groq(api_key=groq_api_key)
 
+    # Convert bytes object to PIL Image object
+    image = Image.open(io.BytesIO(canvas_result))
+
     # Resize the image to a smaller size (e.g., 800x600)
-    canvas_result.thumbnail((800, 600))
+    image.thumbnail((800, 600))
 
     # Save the resized image to a bytes buffer
     buffer = BytesIO()
-    canvas_result.save(buffer, format="JPEG")
+    image.save(buffer, format="JPEG")
 
     # Encode the resized image to base64
     base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
