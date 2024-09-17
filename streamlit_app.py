@@ -65,67 +65,66 @@ def full_app():
         do_something(canvas_result.image_data)   
 
 def do_something(canvas_result):
-    if canvas_result:
-        # Note: You need to have your own Groq API key and LLaVA model
-        groq_api_key = "YOUR_GROQ_API_KEY"
-        llava_model = 'llava-v1.5-7b-4096-preview'
-        llama31_model='llama-3.1-70b-versatile'
+    # Note: You need to have your own Groq API key and LLaVA model
+    groq_api_key = "YOUR_GROQ_API_KEY"
+    llava_model = 'llava-v1.5-7b-4096-preview'
+    llama31_model='llama-3.1-70b-versatile'
 
-        client = Groq(api_key=groq_api_key)
+    client = Groq(api_key=groq_api_key)
 
-        # Resize the image to a smaller size (e.g., 800x600)
-        canvas_result.thumbnail((800, 600))
+    # Resize the image to a smaller size (e.g., 800x600)
+    canvas_result.thumbnail((800, 600))
 
-        # Save the resized image to a bytes buffer
-        buffer = BytesIO()
-        canvas_result.save(buffer, format="JPEG")
+    # Save the resized image to a bytes buffer
+    buffer = BytesIO()
+    canvas_result.save(buffer, format="JPEG")
 
-        # Encode the resized image to base64
-        base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    # Encode the resized image to base64
+    base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-        # image to text function
-        def image_to_text(client, model, base64_image, prompt):
-            try:
-                chat_completion = client.chat.completions.create(
-                    messages=[
-                        {"role": "user",
-                        "content": [
-                            {"type": "text", "text": prompt},
-                            {"type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/jpg;base64,{base64_image}",
-                            }}
-                        ]
-                        }
-                    ],
-                    model=model
-                )
-            except Exception as e:
-                raise RuntimeError(f"Error calling Groq API: {e}") from e
-            return chat_completion.choices[0].message.content
-
-        prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
-        image_description = image_to_text(client, llava_model, base64_image, prompt)
-        st.write(image_description)
-
-        # short story generation funtion
-        def short_story(client, image_description):
+    # image to text function
+    def image_to_text(client, model, base64_image, prompt):
+        try:
             chat_completion = client.chat.completions.create(
-                messages = [
-                    {"role": "system",
-                    "content": "You are a children's book author. Write a short story based on the image description."},
+                messages=[
                     {"role": "user",
-                    "content": image_description}
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {"type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpg;base64,{base64_image}",
+                        }}
+                    ]
+                    }
                 ],
-                model = llama31_model
+                model=model
             )
+        except Exception as e:
+            raise RuntimeError(f"Error calling Groq API: {e}") from e
+        return chat_completion.choices[0].message.content
 
-            return chat_completion.choices[0].message.content
+    prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
+    image_description = image_to_text(client, llava_model, base64_image, prompt)
+    st.write(image_description)
 
-        # signle image processing 
-        short_story = short_story(client, image_description)
-        st.write('Short story:')
-        st.write(short_story)
+    # short story generation funtion
+    def short_story(client, image_description):
+        chat_completion = client.chat.completions.create(
+            messages = [
+                {"role": "system",
+                "content": "You are a children's book author. Write a short story based on the image description."},
+                {"role": "user",
+                "content": image_description}
+            ],
+            model = llama31_model
+        )
+
+        return chat_completion.choices[0].message.content
+
+    # signle image processing 
+    short_story = short_story(client, image_description)
+    st.write('Short story:')
+    st.write(short_story)
 
 if __name__ == "__main__":
     st.set_page_config(
