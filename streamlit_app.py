@@ -15,12 +15,12 @@ def main():
     if "button_id" not in st.session_state:
         st.session_state["button_id"] = ""
     if "color_to_label" not in st.session_state:
-        st.session_state["color_to_label"] = {{}}
+        st.session_state["color_to_label"] = {}
 
     # Define pages
-    PAGES = {{
+    PAGES = {
         "Basic example": full_app,
-    }}
+    }
 
     # Select page
     page = st.sidebar.selectbox("Page:", options=list(PAGES.keys()))
