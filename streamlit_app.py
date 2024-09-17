@@ -59,6 +59,7 @@ def full_app():
         background_image=Image.open(bg_image) if bg_image else None,
         update_streamlit=realtime_update,
         height=550,
+        width = 1000,
         drawing_mode=drawing_mode,
         point_display_radius=point_display_radius if drawing_mode == "point" else 0,
         display_toolbar=st.sidebar.checkbox("Display toolbar", True),
