@@ -118,7 +118,7 @@ def process_canvas_result(image_data):
         return chat_completion.choices[0].message.content
 
     # Generate image description
-    prompt = 'Describe the scene in the image, including any visible text, facial expressions, and background. Identify the main subject and its relationship to the surrounding elements'
+    prompt = 'Transcribe visible text, describe people (if present) including facial expressions, and identify the main subject and its relationship to the background'
     image_description = image_to_text(client, llava_model, image_data, prompt)
     st.write(image_description)
 
