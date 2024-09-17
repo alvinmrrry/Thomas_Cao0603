@@ -44,7 +44,7 @@ def full_app():
     bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
     
     # Process background image
-    if bg_image:
+    if bg_image is not None:
         bg_image = Image.open(bg_image)
         bg_image = bg_image.convert("RGBA")
         st.sidebar.image(bg_image, caption="Background image", use_column_width=True)
@@ -79,7 +79,6 @@ def full_app():
         image_data = img_byte_arr.getvalue()
         if st.button("Submit"):
             process_canvas_result(image_data)
-
 
 def process_canvas_result(image_data):
     # Encode the resized image to base64
