@@ -7,7 +7,9 @@ from groq import Groq
 from PIL import Image
 from config import groq_api_key
 import io
-import numpy as np
+
+llava_model = 'llava-v1.5-7b-4096-preview'
+llama_model='llama-3.1-70b-versatile'
 
 def main():
     # Initialize session state
@@ -66,22 +68,17 @@ def full_app():
         process_canvas_result(canvas_result.image_data)
 
 def process_canvas_result(canvas_result):
-    # Convert canvas result to a numpy array
-    canvas_image = np.zeros((550, 800, 4), dtype=np.uint8)
-    for obj in canvas_result:
-        if obj["type"] == "line":
-            cv2.line(canvas_image, (obj["x0"], obj["y0"]), (obj["x1"], obj["y1"]), (obj["color"][0], obj["color"][1], obj["color"][2]), obj["width"])
-        elif obj["type"] == "rect":
-            cv2.rectangle(canvas_image, (obj["x0"], obj["y0"]), (obj["x1"], obj["y1"]), (obj["color"][0], obj["color"][1], obj["color"][2]), obj["width"])
-        elif obj["type"] == "circle":
-            cv2.circle(canvas_image, (obj["x0"], obj["y0"]), obj["radius"], (obj["color"][0], obj["color"][1], obj["color"][2]), obj["width"])
+    # Convert bytes object to PIL Image object
+    image = Image.open(BytesIO(canvas_result))
 
-    # Save the numpy array to a bytes buffer
+    # Resize the image to a smaller size (e.g., 800x600)
+    image.thumbnail((800, 600))
+
+    # Save the resized image to a bytes buffer
     buffer = BytesIO()
-    cv2.imwrite(buffer, canvas_image)
-    buffer.seek(0)
+    image.save(buffer, format="JPEG")
 
-    # Encode the bytes buffer to base64
+    # Encode the resized image to base64
     base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
     # Initialize Groq client
@@ -117,14 +114,14 @@ def process_canvas_result(canvas_result):
                 {"role": "user",
                 "content": image_description}
             ],
-            model = LLAMA_MODEL
+            model = llama_model
         )
 
         return chat_completion.choices[0].message.content
 
     # Generate image description
     prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
-    image_description = image_to_text(client, LLAVA_MODEL, base64_image, prompt)
+    image_description = image_to_text(client, llava_model, base64_image, prompt)
     st.write(image_description)
 
     # Generate short story
