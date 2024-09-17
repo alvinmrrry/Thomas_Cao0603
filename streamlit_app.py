@@ -115,7 +115,7 @@ def process_canvas_result(image_data):
 
     # Generate image description
     prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
-    image_description = image_to_text(client, llava_model, base64_image, prompt)
+    image_description = image_to_text(client, llava_model, image_data, prompt)
     st.write(image_description)
 
     # Generate short story
