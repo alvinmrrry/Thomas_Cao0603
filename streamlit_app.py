@@ -61,7 +61,7 @@ def full_app():
         key="full_app",
     )
 
-    if canvas_result.image_data is not None:
+    if canvas_result.image_data is not None and canvas_result.image_data.size > 0:
         do_something(canvas_result.image_data)   
 
 def do_something(canvas_result):
