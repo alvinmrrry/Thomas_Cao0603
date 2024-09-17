@@ -65,17 +65,22 @@ def full_app():
         process_canvas_result(canvas_result.image_data)
 
 def process_canvas_result(canvas_result):
-    # Convert bytes object to PIL Image object
-    image = Image.open(BytesIO(canvas_result))
+    # Convert canvas result to a numpy array
+    canvas_image = np.zeros((550, 800, 4), dtype=np.uint8)
+    for obj in canvas_result:
+        if obj["type"] == "line":
+            cv2.line(canvas_image, (obj["x0"], obj["y0"]), (obj["x1"], obj["y1"]), (obj["color"][0], obj["color"][1], obj["color"][2]), obj["width"])
+        elif obj["type"] == "rect":
+            cv2.rectangle(canvas_image, (obj["x0"], obj["y0"]), (obj["x1"], obj["y1"]), (obj["color"][0], obj["color"][1], obj["color"][2]), obj["width"])
+        elif obj["type"] == "circle":
+            cv2.circle(canvas_image, (obj["x0"], obj["y0"]), obj["radius"], (obj["color"][0], obj["color"][1], obj["color"][2]), obj["width"])
 
-    # Resize the image to a smaller size (e.g., 800x600)
-    image.thumbnail((800, 600))
-
-    # Save the resized image to a bytes buffer
+    # Save the numpy array to a bytes buffer
     buffer = BytesIO()
-    image.save(buffer, format="JPEG")
+    cv2.imwrite(buffer, canvas_image)
+    buffer.seek(0)
 
-    # Encode the resized image to base64
+    # Encode the bytes buffer to base64
     base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
     # Initialize Groq client
