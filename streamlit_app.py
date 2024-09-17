@@ -81,13 +81,53 @@ def process_canvas_result(image_data):
 
     # Define image-to-text function
     def image_to_text(client, model, base64_image, prompt):
+        try:
+            chat_completion = client.chat.completions.create(
+                messages=[
+                    {"role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {"type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpg;base64,{base64_image}",
+                        }}
+                    ]
+                    }
+                ],
+                model=model
+            )
+        except Exception as e:
+            raise RuntimeError(f"Error calling Groq API: {e}") from e
+        return chat_completion.choices[0].message.content
+
+    # Define short story generation function
+    def short_story(client, image_description):
         chat_completion = client.chat.completions.create(
-            messages=[
+            messages = [
+                {"role": "system",
+                "content": "You are a children's book author. Write a short story based on the image description."},
                 {"role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {"type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/jpg;base64,{base64_image}",
-                    }}]}
-                ])
+                "content": image_description}
+            ],
+            model = llama_model
+        )
+
+        return chat_completion.choices[0].message.content
+
+    # Generate image description
+    prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
+    image_description = image_to_text(client, llava_model, base64_image, prompt)
+    st.write(image_description)
+
+    # Generate short story
+    short_story_result = short_story(client, image_description)
+    st.write('Short story:')
+    st.write(short_story_result)
+
+if __name__ == "__main__":
+    st.set_page_config(
+        page_title="Streamlit Drawable Canvas Demo", page_icon=":pencil2:"
+    )
+    st.title("Drawable Canvas Demo")
+    st.sidebar.subheader("Configuration")
+    main()
