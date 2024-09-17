@@ -6,7 +6,6 @@ from streamlit_drawable_canvas import st_canvas
 from groq import Groq
 from config import groq_api_key
 import io
-import numpy as np
 
 llava_model = 'llava-v1.5-7b-4096-preview'
 llama_model='llama-3.1-70b-versatile'
@@ -46,11 +45,14 @@ def full_app():
     # Process background image
     if bg_image is not None:
         bg_image = Image.open(bg_image)
-        bg_image = bg_image.convert("RGBA")
+        bg_image = bg_image.convert("RGB")  # Convert to RGB
         st.sidebar.image(bg_image, caption="Background image", use_column_width=True)
         
-        # Convert PIL Image to numpy array
-        bg_image = np.array(bg_image)
+        # Convert PIL Image to bytes
+        img_byte_arr = io.BytesIO()
+        bg_image.save(img_byte_arr, format='PNG')
+        encoded_image = base64.b64encode(img_byte_arr.getvalue()).decode('ascii')
+        bg_image = f"data:image/png;base64,{encoded_image}"
     else:
         bg_image = None
 
@@ -61,7 +63,7 @@ def full_app():
         fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
         stroke_width=stroke_width,
         stroke_color=stroke_color,
-        background_color=bg_color if bg_image is None else None,
+        background_color="" if bg_image else bg_color,
         background_image=bg_image,
         update_streamlit=realtime_update,
         height=550,
@@ -73,7 +75,7 @@ def full_app():
 
     # Process canvas result
     if canvas_result.image_data is not None:
-        image = Image.fromarray(canvas_result.image_data.astype('uint8'), 'RGBA')
+        image = Image.fromarray(canvas_result.image_data.astype('uint8'), 'RGB')
         img_byte_arr = BytesIO()
         image.save(img_byte_arr, format='PNG')
         image_data = img_byte_arr.getvalue()
