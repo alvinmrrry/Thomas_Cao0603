@@ -118,7 +118,7 @@ def process_canvas_result(image_data):
         return chat_completion.choices[0].message.content
 
     # Generate image description
-    prompt = 'Transcribe visible text by OCR technology, and then describe people (if present) including facial expressions, and identify the main subject and its relationship to the background'
+    prompt = 'Transcribe visible text by OCR technology'
     image_description = image_to_text(client, llava_model, image_data, prompt)
     st.write(image_description)
 
