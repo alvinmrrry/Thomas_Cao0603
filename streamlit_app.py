@@ -65,9 +65,11 @@ def full_app():
 
     # Process canvas result
     if canvas_result.image_data is not None:
-        image = canvas_result.image_data
-        st.image(image)
-        process_canvas_result(image)
+        image = Image.fromarray(canvas_result.image_data)
+        img_byte_arr = BytesIO()
+        image.save(img_byte_arr, format='JPEG')
+        image_data = img_byte_arr.getvalue()
+        process_canvas_result(image_data)
 
 def process_canvas_result(image_data):
     # Encode the resized image to base64
