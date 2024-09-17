@@ -64,13 +64,10 @@ def full_app():
     )
 
     # Process canvas result
-    if canvas_result.image_data is not None and canvas_result.image_data.size > 0:
-        image = Image.open(BytesIO(canvas_result.image_data))
-        image_data = np.array(image)
-        image_data = image_data[:, :, :3]  # Remove alpha channel
-        image_data = image_data / 255.0  # Normalize to [0, 1]
-        image_data = image_data.astype(np.float32)
-        process_canvas_result(image_data)
+    if canvas_result.image_data is not None:
+        image = canvas_result.image_data
+        st.write(image)
+        process_canvas_result(image)
 
 def process_canvas_result(image_data):
     # Encode the resized image to base64
