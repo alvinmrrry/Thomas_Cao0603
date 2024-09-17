@@ -65,21 +65,16 @@ def full_app():
 
     # Process canvas result
     if canvas_result.image_data is not None and canvas_result.image_data.size > 0:
-        process_canvas_result(canvas_result.image_data)
+        image = Image.open(BytesIO(canvas_result.image_data))
+        image_data = np.array(image)
+        image_data = image_data[:, :, :3]  # Remove alpha channel
+        image_data = image_data / 255.0  # Normalize to [0, 1]
+        image_data = image_data.astype(np.float32)
+        process_canvas_result(image_data)
 
-def process_canvas_result(canvas_result):
-    # Convert bytes object to PIL Image object
-    image = Image.open(BytesIO(canvas_result))
-
-    # Resize the image to a smaller size (e.g., 800x600)
-    image.thumbnail((800, 600))
-
-    # Save the resized image to a bytes buffer
-    buffer = BytesIO()
-    image.save(buffer, format="JPEG")
-
+def process_canvas_result(image_data):
     # Encode the resized image to base64
-    base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    image_data = base64.b64encode(image_data).decode("utf-8")
 
     # Initialize Groq client
     client = Groq(api_key=groq_api_key)
@@ -96,43 +91,4 @@ def process_canvas_result(canvas_result):
                         "image_url": {
                             "url": f"data:image/jpg;base64,{base64_image}",
                         }}
-                    ]
-                    }
-                ],
-                model=model
-            )
-        except Exception as e:
-            raise RuntimeError(f"Error calling Groq API: {e}") from e
-        return chat_completion.choices[0].message.content
-
-    # Define short story generation function
-    def short_story(client, image_description):
-        chat_completion = client.chat.completions.create(
-            messages = [
-                {"role": "system",
-                "content": "You are a children's book author. Write a short story based on the image description."},
-                {"role": "user",
-                "content": image_description}
-            ],
-            model = llama_model
-        )
-
-        return chat_completion.choices[0].message.content
-
-    # Generate image description
-    prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
-    image_description = image_to_text(client, llava_model, base64_image, prompt)
-    st.write(image_description)
-
-    # Generate short story
-    short_story_result = short_story(client, image_description)
-    st.write('Short story:')
-    st.write(short_story_result)
-
-if __name__ == "__main__":
-    st.set_page_config(
-        page_title="Streamlit Drawable Canvas Demo", page_icon=":pencil2:"
-    )
-    st.title("Drawable Canvas Demo")
-    st.sidebar.subheader("Configuration")
-    main()
+                        
