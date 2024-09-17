@@ -44,6 +44,7 @@ def full_app():
     bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
     if bg_image:
         bg_image = Image.open(bg_image)
+        st.image(bg_image, caption="Background image", use_column_width=True)
     else:
         bg_image = None
     realtime_update = st.sidebar.checkbox("Update in realtime", True)
@@ -131,3 +132,4 @@ if __name__ == "__main__":
     st.title("Drawable Canvas Demo")
     st.sidebar.subheader("Configuration")
     main()
+
