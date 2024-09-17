@@ -1,11 +1,12 @@
 import base64
 from io import BytesIO
 import streamlit as st
+from PIL import Image
 from streamlit_drawable_canvas import st_canvas
 from groq import Groq
-from PIL import Image
 from config import groq_api_key
 import io
+import numpy as np
 
 llava_model = 'llava-v1.5-7b-4096-preview'
 llama_model='llama-3.1-70b-versatile'
@@ -41,12 +42,17 @@ def full_app():
     stroke_color = st.sidebar.color_picker("Stroke color hex: ")
     bg_color = st.sidebar.color_picker("Background color hex: ", "#eee")
     bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
+    
+    # Process background image
     if bg_image:
         bg_image = Image.open(bg_image)
-        bg_image = bg_image.resize((800, 550))  # Resize the image to fit the canvas
-        st.session_state['bg_image'] = bg_image  # Store the image in session state
+        bg_image = bg_image.convert("RGBA")
+        st.sidebar.image(bg_image, caption="Background image", use_column_width=True)
+        
+        # Convert PIL Image to numpy array
+        bg_image = np.array(bg_image)
     else:
-        st.session_state['bg_image'] = None  # Store None in session state
+        bg_image = None
 
     realtime_update = st.sidebar.checkbox("Update in realtime", True)
 
@@ -55,11 +61,10 @@ def full_app():
         fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
         stroke_width=stroke_width,
         stroke_color=stroke_color,
-        background_color=bg_color,
-        background_image=st.session_state['bg_image'],  # Load the image from session state
+        background_color=bg_color if bg_image is None else None,
+        background_image=bg_image,
         update_streamlit=realtime_update,
         height=550,
-        width=800,  # Set the canvas width to match the resized image
         drawing_mode=drawing_mode,
         point_display_radius=point_display_radius,
         display_toolbar=st.sidebar.checkbox("Display toolbar", True),
@@ -68,12 +73,13 @@ def full_app():
 
     # Process canvas result
     if canvas_result.image_data is not None:
-        image = Image.fromarray(canvas_result.image_data)
+        image = Image.fromarray(canvas_result.image_data.astype('uint8'), 'RGBA')
         img_byte_arr = BytesIO()
         image.save(img_byte_arr, format='PNG')
         image_data = img_byte_arr.getvalue()
         if st.button("Submit"):
             process_canvas_result(image_data)
+
 
 def process_canvas_result(image_data):
     # Encode the resized image to base64
