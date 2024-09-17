@@ -6,6 +6,8 @@ from streamlit_drawable_canvas import st_canvas
 from groq import Groq
 from config import groq_api_key
 import io
+import numpy as np
+from PIL import Image
 
 llava_model = 'llava-v1.5-7b-4096-preview'
 llama_model='llama-3.1-70b-versatile'
@@ -41,17 +43,25 @@ def full_app():
     stroke_color = st.sidebar.color_picker("Stroke color hex: ")
     bg_color = st.sidebar.color_picker("Background color hex: ", "#eee")
     bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
-    
+
     # Process background image
     if bg_image is not None:
-        bg_image = Image.open(bg_image)
-        bg_image = bg_image.convert("RGB")  # Convert to RGB
-        st.sidebar.image(bg_image, caption="Background image", use_column_width=True)
-        
-        # Convert PIL Image to bytes
+        img = Image.open(bg_image)
+        img = img.convert("RGB")  # Convert to RGB
+        st.sidebar.image(img, caption="Background image", use_column_width=True)
+
+        # Convert PIL Image to numpy array
+        img_array = np.array(img)
+
+        # Convert numpy array to bytes
         img_byte_arr = io.BytesIO()
-        bg_image.save(img_byte_arr, format='PNG')
-        encoded_image = base64.b64encode(img_byte_arr.getvalue()).decode('ascii')
+        img.save(img_byte_arr, format='PNG')
+        img_bytes = img_byte_arr.getvalue()
+
+        # Encode bytes to base64
+        encoded_image = base64.b64encode(img_bytes).decode('ascii')
+
+        # Convert base64 encoded string to data URL
         bg_image = f"data:image/png;base64,{encoded_image}"
     else:
         bg_image = None
