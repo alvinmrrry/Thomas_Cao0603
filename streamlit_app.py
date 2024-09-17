@@ -7,6 +7,7 @@ from groq import Groq
 from PIL import Image
 from config import groq_api_key
 import io
+import numpy as np
 
 def main():
     # Initialize session state
@@ -84,7 +85,7 @@ def process_canvas_result(canvas_result):
     base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
     # Initialize Groq client
-    client = Groq(api_key=GROQ_API_KEY)
+    client = Groq(api_key=groq_api_key)
 
     # Define image-to-text function
     def image_to_text(client, model, base64_image, prompt):
