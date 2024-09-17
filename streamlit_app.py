@@ -79,11 +79,11 @@ def full_app():
     # Do something interesting with the image data and paths
     if canvas_result.image_data is not None:
         st.image(canvas_result.image_data)
-    if canvas_result.json_data is not None:
-        objects = pd.json_normalize(canvas_result.json_data["objects"])
-        for col in objects.select_dtypes(include=["object"]).columns:
-            objects[col] = objects[col].astype("str")
-        st.dataframe(objects)
+    # if canvas_result.json_data is not None:
+    #     objects = pd.json_normalize(canvas_result.json_data["objects"])
+    #     for col in objects.select_dtypes(include=["object"]).columns:
+    #         objects[col] = objects[col].astype("str")
+    #     st.dataframe(objects)
 
 if __name__ == "__main__":
     st.set_page_config(
