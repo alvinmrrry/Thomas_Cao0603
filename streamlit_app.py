@@ -5,31 +5,28 @@ from PIL import Image
 from streamlit_drawable_canvas import st_canvas
 from groq import Groq
 from PIL import Image
+from config import groq_api_key
 import io
 
 def main():
+    # Initialize session state
     if "button_id" not in st.session_state:
         st.session_state["button_id"] = ""
     if "color_to_label" not in st.session_state:
         st.session_state["color_to_label"] = {}
+
+    # Define pages
     PAGES = {
         "Basic example": full_app,
     }
+
+    # Select page
     page = st.sidebar.selectbox("Page:", options=list(PAGES.keys()))
     PAGES[page]()
 
 def full_app():
+    # Configure canvas parameters
     st.sidebar.header("Configuration")
-    st.markdown(
-        """
-    Draw on the canvas, get the drawings back to Streamlit!
-    * Configure canvas in the sidebar
-    * In transform mode, double-click an object to remove it
-    * In polygon mode, left-click to add a point, right-click to close the polygon, double-click to remove the latest point
-    """
-    )
-
-    # Specify canvas parameters in application
     drawing_mode = st.sidebar.selectbox(
         "Drawing tool:",
         ("freedraw", "line", "rect", "circle", "transform", "polygon", "point"),
@@ -48,7 +45,7 @@ def full_app():
         bg_image = None
     realtime_update = st.sidebar.checkbox("Update in realtime", True)
 
-    # Create a canvas component
+    # Create canvas component
     canvas_result = st_canvas(
         fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
         stroke_width=stroke_width,
@@ -63,19 +60,13 @@ def full_app():
         key="full_app",
     )
 
+    # Process canvas result
     if canvas_result.image_data is not None and canvas_result.image_data.size > 0:
-        do_something(canvas_result.image_data)   
+        process_canvas_result(canvas_result.image_data)
 
-def do_something(canvas_result):
-    # Note: You need to have your own Groq API key and LLaVA model
-    groq_api_key = "YOUR_GROQ_API_KEY"
-    llava_model = 'llava-v1.5-7b-4096-preview'
-    llama31_model='llama-3.1-70b-versatile'
-
-    client = Groq(api_key=groq_api_key)
-
+def process_canvas_result(canvas_result):
     # Convert bytes object to PIL Image object
-    image = Image.open(io.BytesIO(canvas_result))
+    image = Image.open(BytesIO(canvas_result))
 
     # Resize the image to a smaller size (e.g., 800x600)
     image.thumbnail((800, 600))
@@ -87,7 +78,10 @@ def do_something(canvas_result):
     # Encode the resized image to base64
     base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-    # image to text function
+    # Initialize Groq client
+    client = Groq(api_key=GROQ_API_KEY)
+
+    # Define image-to-text function
     def image_to_text(client, model, base64_image, prompt):
         try:
             chat_completion = client.chat.completions.create(
@@ -108,11 +102,7 @@ def do_something(canvas_result):
             raise RuntimeError(f"Error calling Groq API: {e}") from e
         return chat_completion.choices[0].message.content
 
-    prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
-    image_description = image_to_text(client, llava_model, base64_image, prompt)
-    st.write(image_description)
-
-    # short story generation funtion
+    # Define short story generation function
     def short_story(client, image_description):
         chat_completion = client.chat.completions.create(
             messages = [
@@ -121,15 +111,20 @@ def do_something(canvas_result):
                 {"role": "user",
                 "content": image_description}
             ],
-            model = llama31_model
+            model = LLAMA_MODEL
         )
 
         return chat_completion.choices[0].message.content
 
-    # signle image processing 
-    short_story = short_story(client, image_description)
+    # Generate image description
+    prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
+    image_description = image_to_text(client, LLAVA_MODEL, base64_image, prompt)
+    st.write(image_description)
+
+    # Generate short story
+    short_story_result = short_story(client, image_description)
     st.write('Short story:')
-    st.write(short_story)
+    st.write(short_story_result)
 
 if __name__ == "__main__":
     st.set_page_config(
