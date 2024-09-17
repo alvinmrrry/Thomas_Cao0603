@@ -1,7 +1,6 @@
 import base64
 from io import BytesIO
 import streamlit as st
-from PIL import Image
 from streamlit_drawable_canvas import st_canvas
 from groq import Groq
 from PIL import Image
@@ -44,6 +43,7 @@ def full_app():
     bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
     if bg_image:
         bg_image = Image.open(bg_image)
+        bg_image = bg_image.resize((800, 550))  # Resize the image to fit the canvas
         st.session_state['bg_image'] = bg_image  # Store the image in session state
     else:
         st.session_state['bg_image'] = None  # Store None in session state
@@ -59,6 +59,7 @@ def full_app():
         background_image=st.session_state['bg_image'],  # Load the image from session state
         update_streamlit=realtime_update,
         height=550,
+        width=800,  # Set the canvas width to match the resized image
         drawing_mode=drawing_mode,
         point_display_radius=point_display_radius,
         display_toolbar=st.sidebar.checkbox("Display toolbar", True),
