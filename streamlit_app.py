@@ -7,7 +7,6 @@ from groq import Groq
 from config import groq_api_key
 import io
 import numpy as np
-from PIL import Image
 
 llava_model = 'llava-v1.5-7b-4096-preview'
 llama_model='llama-3.1-70b-versatile'
@@ -44,27 +43,11 @@ def full_app():
     bg_color = st.sidebar.color_picker("Background color hex: ", "#eee")
     bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
 
-    # Process background image
+    bg_image_pil = None
     if bg_image is not None:
-        img = Image.open(bg_image)
-        img = img.convert("RGB")  # Convert to RGB
-        st.sidebar.image(img, caption="Background image", use_column_width=True)
-
-        # Convert PIL Image to numpy array
-        img_array = np.array(img)
-
-        # Convert numpy array to bytes
-        img_byte_arr = io.BytesIO()
-        img.save(img_byte_arr, format='PNG')
-        img_bytes = img_byte_arr.getvalue()
-
-        # Encode bytes to base64
-        encoded_image = base64.b64encode(img_bytes).decode('ascii')
-
-        # Convert base64 encoded string to data URL
-        bg_image = f"data:image/png;base64,{encoded_image}"
-    else:
-        bg_image = None
+        bg_image_pil = Image.open(bg_image)
+        bg_image_pil = bg_image_pil.convert("RGB")  # Convert to RGB
+        st.sidebar.image(bg_image_pil, caption="Background image", use_column_width=True)
 
     realtime_update = st.sidebar.checkbox("Update in realtime", True)
 
@@ -73,8 +56,8 @@ def full_app():
         fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
         stroke_width=stroke_width,
         stroke_color=stroke_color,
-        background_color="" if bg_image else bg_color,
-        background_image=bg_image,
+        background_color="" if bg_image_pil else bg_color,
+        background_image=bg_image_pil,
         update_streamlit=realtime_update,
         height=550,
         drawing_mode=drawing_mode,
