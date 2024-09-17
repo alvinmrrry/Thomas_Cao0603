@@ -66,7 +66,7 @@ def full_app():
     # Process canvas result
     if canvas_result.image_data is not None:
         image = canvas_result.image_data
-        st.write(image)
+        st.image(image)
         process_canvas_result(image)
 
 def process_canvas_result(image_data):
