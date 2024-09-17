@@ -67,7 +67,7 @@ def full_app():
     if canvas_result.image_data is not None:
         image = Image.fromarray(canvas_result.image_data)
         img_byte_arr = BytesIO()
-        image.save(img_byte_arr, format='JPG')
+        image.save(img_byte_arr, format='PNG')
         image_data = img_byte_arr.getvalue()
         process_canvas_result(image_data)
 
