@@ -69,7 +69,8 @@ def full_app():
         img_byte_arr = BytesIO()
         image.save(img_byte_arr, format='PNG')
         image_data = img_byte_arr.getvalue()
-        process_canvas_result(image_data)
+        if st.button("Submit"):
+            process_canvas_result(image_data)
 
 def process_canvas_result(image_data):
     # Encode the resized image to base64
