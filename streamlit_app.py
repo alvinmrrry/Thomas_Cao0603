@@ -44,9 +44,10 @@ def full_app():
     bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
     if bg_image:
         bg_image = Image.open(bg_image)
-        st.image(bg_image, caption="Background image", use_column_width=True)
+        st.session_state['bg_image'] = bg_image  # Store the image in session state
     else:
-        bg_image = None
+        st.session_state['bg_image'] = None  # Store None in session state
+
     realtime_update = st.sidebar.checkbox("Update in realtime", True)
 
     # Create canvas component
@@ -55,7 +56,7 @@ def full_app():
         stroke_width=stroke_width,
         stroke_color=stroke_color,
         background_color=bg_color,
-        background_image=bg_image,
+        background_image=st.session_state['bg_image'],  # Load the image from session state
         update_streamlit=realtime_update,
         height=550,
         drawing_mode=drawing_mode,
@@ -132,4 +133,3 @@ if __name__ == "__main__":
     st.title("Drawable Canvas Demo")
     st.sidebar.subheader("Configuration")
     main()
-
