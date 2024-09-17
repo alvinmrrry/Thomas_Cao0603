@@ -58,10 +58,11 @@ def full_app():
         point_display_radius=point_display_radius,
         display_toolbar=st.sidebar.checkbox("Display toolbar", True),
         key="full_app",
+        return_strokes=True
     )
 
-    if canvas_result.image_data:
-        do_something(canvas_result)
+    if canvas_result is not None and 'image_data' in canvas_result:
+        do_something(canvas_result['image_data'])   
 
 def do_something(canvas_result):
     if canvas_result:
