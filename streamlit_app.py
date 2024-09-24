@@ -6,14 +6,16 @@ from PIL import Image
 import io
 
 SERPER_API_KEY = "3c75331dffc120acfa03b3bc75a4fbb3202c4927"
+from llama_index.llms.openai import OpenAI
 from crewai import Agent, Task, Crew, Process
-from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
-from langchain_groq import ChatGroq
+from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseToo
+import os
 # Initialize the ChatGroq model
-llm = ChatGroq(
-    api_key=groq_api_key,
-    model="groq/llama-3.1-70b-versatile"
-)
+os.environ["OPENAI_API_BASE"] = 'https://api.agicto.cn/v1'
+os.environ["OPENAI_MODEL_NAME"] ='gpt-4o-mini'  
+os.environ["OPENAI_API_KEY"] = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
+llm = OpenAI(temperature=0, model="gpt-4o-mini")
+
 # Define the agents
 class SalesAgents:
     def __init__(self):
