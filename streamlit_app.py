@@ -9,11 +9,12 @@ SERPER_API_KEY = "3c75331dffc120acfa03b3bc75a4fbb3202c4927"
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
 import os
-from langchain.llms import OpenAI
+# from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
 # Initialize the ChatGroq model
 # openai.api_key = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
 # openai.api_base = 'https://api.agicto.cn/v1'
-llm = OpenAI(
+llm = ChatOpenAI(
     model="gpt-4o-mini",
     api_key = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ',
     api_base = 'https://api.agicto.cn/v1',
