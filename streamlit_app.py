@@ -4,6 +4,7 @@ import streamlit as st
 import base64
 from PIL import Image
 import io
+from crewai import Agent
 
 client = Groq(api_key=groq_api_key)
 
