@@ -17,7 +17,7 @@ from langchain.chat_models import ChatOpenAI
 llm = ChatOpenAI(
     model="gpt-4o-mini",
     api_key = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ',
-    api_base = 'https://api.agicto.cn/v1',
+    base_url = 'https://api.agicto.cn/v1',
 )
 
 # Define the agents
