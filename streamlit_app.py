@@ -19,6 +19,8 @@ OPENAI_API_BASE='https://api.agicto.cn/v1'
 # openai.api_base = 'https://api.agicto.cn/v1'
 llm = ChatOpenAI(
     model="gpt-4o-mini",
+    openai_api_key=OPENAI_API_KEY,
+    openai_api_base=OPENAI_API_BASE
 )
 
 # Define the agents
