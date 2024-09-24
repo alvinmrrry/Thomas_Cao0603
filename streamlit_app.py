@@ -4,7 +4,6 @@ import streamlit as st
 import base64
 from PIL import Image
 import io
-from crewai import Agent
 
 client = Groq(api_key=groq_api_key)
 
@@ -72,3 +71,8 @@ if uploaded_file:
     short_story = short_story(client, image_description)
     st.write('Short story:')
     st.write(short_story)
+
+
+import os
+from crewai import Agent, Task, Crew
+from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
