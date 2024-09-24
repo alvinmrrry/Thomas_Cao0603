@@ -10,4 +10,3 @@ crewai_tools
 pysqlite3-binary
 crewai
 duckduckgo-search
-openai

@@ -6,16 +6,17 @@ from PIL import Image
 import io
 
 SERPER_API_KEY = "3c75331dffc120acfa03b3bc75a4fbb3202c4927"
-import openai
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
 import os
+from langchain.llms import OpenAI
 # Initialize the ChatGroq model
-openai.api_key = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
-openai.api_base = 'https://api.agicto.cn/v1'
-llm = openai.ChatCompletion.create(
+# openai.api_key = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
+# openai.api_base = 'https://api.agicto.cn/v1'
+llm = OpenAI(
     model="gpt-4o-mini",
-    messages=[{ "role": "user", "content": "Hello world" }]
+    api_key = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ',
+    api_base = 'https://api.agicto.cn/v1',
 )
 
 # Define the agents
