@@ -68,6 +68,7 @@ class SentimentAnalysisTool(BaseTool):
         return "positive"
 
 sentiment_analysis_tool = SentimentAnalysisTool()
+
 # Define the tasks
 class SalesTasks:
     def lead_profiling_task(self):
@@ -90,7 +91,7 @@ class SalesTasks:
                 "A detailed report on {lead_name}, covering company background, key personnel, recent projects, and specific needs related to estimating services. "
                 "Identify potential areas where our estimating solutions can add value and propose customized engagement strategies."
             ),
-            tools=[],
+            tools=[directory_read_tool, file_read_tool, search_tool],
             agent=SalesAgents().sales_rep_agent()
         )
 
@@ -116,7 +117,7 @@ class SalesTasks:
                 "Each draft should clearly connect our estimating services with their recent project developments and goals. "
                 "The tone should be professional, engaging, and consistent with {lead_name}'s company culture."
             ),
-            tools=[],
+            tools=[sentiment_analysis_tool, search_tool],
             agent=SalesAgents().lead_sales_rep_agent()
         )
 # Create the crew
