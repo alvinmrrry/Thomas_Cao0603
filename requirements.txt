@@ -4,8 +4,6 @@ langchain
 langchain_groq
 google-search-results
 langchain_community
-streamlit_drawable_canvas
-svgpathtools
 crewai_tools
 pysqlite3-binary
 crewai

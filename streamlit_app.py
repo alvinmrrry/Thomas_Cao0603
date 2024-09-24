@@ -3,6 +3,7 @@ import os
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import SerperDevTool
 from langchain_openai import ChatOpenAI
+import streamlit as st
 
 os.environ["SERPER_API_KEY"] = "2203d27aa32a1d92275134fb632bf009714b2476" # serper.dev API key
 os.environ["OPENAI_API_BASE"] = 'https://api.agicto.cn/v1'
