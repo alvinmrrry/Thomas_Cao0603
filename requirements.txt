@@ -6,4 +6,3 @@ langchain
 langchain_groq
 google-search-results
 langchain_community==0.0.29
-sqlite3>=3.35
