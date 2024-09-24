@@ -5,19 +5,19 @@ import base64
 from PIL import Image
 import io
 
-SERPER_API_KEY = "3c75331dffc120acfa03b3bc75a4fbb3202c4927"
-from crewai import Agent, Task, Crew, Process
+
 from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
 import os
-from langchain_openai import OpenAI
-OPENAI_API_KEY='sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
-OPENAI_API_BASE='https://api.agicto.cn/v1'
-llm = OpenAI(
-    model="gpt-4o-mini",
-    temperature=0,
-    api_key=OPENAI_API_KEY,
-    base_url=OPENAI_API_BASE,
-)
+from crewai import Agent, Task, Crew, Process
+from crewai_tools import SerperDevTool
+from langchain_openai import ChatOpenAI
+
+os.environ["SERPER_API_KEY"] = "2203d27aa32a1d92275134fb632bf009714b2476" # serper.dev API key
+os.environ["OPENAI_API_BASE"] = 'https://api.agicto.cn/v1'
+os.environ["OPENAI_MODEL_NAME"] ='gpt-4o-mini'  # Adjust based on available model
+os.environ["OPENAI_API_KEY"] = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
+
+llm = ChatOpenAI(model="gpt-4o-mini")
 
 # Define the agents
 class SalesAgents:
