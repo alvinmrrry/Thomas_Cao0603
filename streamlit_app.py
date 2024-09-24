@@ -5,6 +5,7 @@ import base64
 from PIL import Image
 import io
 
+SERPER_API_KEY = "3c75331dffc120acfa03b3bc75a4fbb3202c4927"
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
 from langchain_groq import ChatGroq
