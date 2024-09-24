@@ -6,3 +6,6 @@ google-search-results
 langchain_community
 streamlit_drawable_canvas
 svgpathtools
+pysqlite3-binary
+crewai
+duckduckgo-search
