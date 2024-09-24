@@ -1,8 +1,8 @@
 streamlit
-crewai==0.28.8
-crewai_tools==0.1.6
 groq
 langchain
 langchain_groq
 google-search-results
-langchain_community==0.0.29
+langchain_community
+streamlit_drawable_canvas
+svgpathtools
