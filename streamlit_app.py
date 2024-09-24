@@ -55,6 +55,20 @@ class SalesAgents:
             memory=True,
             max_iter=2
         )
+# Define the tools
+directory_read_tool = DirectoryReadTool(directory='./content')
+file_read_tool = FileReadTool()
+search_tool = SerperDevTool()
+
+class SentimentAnalysisTool(BaseTool):
+    name: str = "Sentiment Analysis Tool"
+    description: str = ("Analyzes the sentiment of text to ensure positive and engaging communication according to context.")
+
+    def _run(self, text: str) -> str:
+        # Custom sentiment analysis logic
+        return "positive"
+
+sentiment_analysis_tool = SentimentAnalysisTool()
 # Define the tasks
 class SalesTasks:
     def lead_profiling_task(self):
