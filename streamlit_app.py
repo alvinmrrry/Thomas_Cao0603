@@ -6,15 +6,14 @@ from PIL import Image
 import io
 
 SERPER_API_KEY = "3c75331dffc120acfa03b3bc75a4fbb3202c4927"
-from openai import OpenAI
+import openai
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
 import os
 # Initialize the ChatGroq model
-os.environ["OPENAI_API_BASE"] = 'https://api.agicto.cn/v1'
-os.environ["OPENAI_MODEL_NAME"] ='gpt-4o-mini'  
-os.environ["OPENAI_API_KEY"] = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
-llm = OpenAI()
+openai.api_key = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
+openai.api_base = 'https://api.agicto.cn/v1'
+llm = openai.Model('gpt-4o-mini')
 
 # Define the agents
 class SalesAgents:
