@@ -14,7 +14,7 @@ import os
 os.environ["OPENAI_API_BASE"] = 'https://api.agicto.cn/v1'
 os.environ["OPENAI_MODEL_NAME"] ='gpt-4o-mini'  
 os.environ["OPENAI_API_KEY"] = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
-llm = OpenAI(model="gpt-4o-mini")
+llm = OpenAI()
 
 # Define the agents
 class SalesAgents:
