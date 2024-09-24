@@ -12,7 +12,7 @@ import os
 # from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 OPENAI_API_KEY='sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
-OPENAI_API_BASE=https://api.agicto.cn/v1
+OPENAI_API_BASE='https://api.agicto.cn/v1'
 
 # Initialize the ChatGroq model
 # openai.api_key = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
