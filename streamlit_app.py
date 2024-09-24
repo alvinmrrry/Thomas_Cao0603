@@ -71,3 +71,7 @@ if uploaded_file:
     short_story = short_story(client, image_description)
     st.write('Short story:')
     st.write(short_story)
+
+from crewai import Agent, Task, Crew, Process
+from langchain_community.tools import DuckDuckGoSearchRun
+from langchain.agents import Tool
