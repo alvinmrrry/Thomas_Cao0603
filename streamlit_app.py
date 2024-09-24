@@ -11,8 +11,8 @@ from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseToo
 from langchain_groq import ChatGroq
 # Initialize the ChatGroq model
 llm = ChatGroq(
-    api_key="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",
-    model="mixtral-8x7b-32768"
+    api_key=groq_api_key,
+    model="llama-3.1-70b-versatile"
 )
 # Define the agents
 class SalesAgents:
