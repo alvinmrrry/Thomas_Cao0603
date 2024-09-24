@@ -1,7 +1,6 @@
 from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
 import os
 from crewai import Agent, Task, Crew, Process
-from crewai_tools import SerperDevTool
 from langchain_openai import ChatOpenAI
 import streamlit as st
 
@@ -55,8 +54,8 @@ class SalesAgents:
             max_iter=2
         )
 # Define the tools
-directory_read_tool = DirectoryReadTool(directory='./content')
-file_read_tool = FileReadTool()
+# directory_read_tool = DirectoryReadTool(directory='./content')
+file_read_tool = FileReadTool(file_path='./content')
 search_tool = SerperDevTool()
 
 class SentimentAnalysisTool(BaseTool):
@@ -91,7 +90,7 @@ class SalesTasks:
                 "A detailed report on {lead_name}, covering company background, key personnel, recent projects, and specific needs related to estimating services. "
                 "Identify potential areas where our estimating solutions can add value and propose customized engagement strategies."
             ),
-            tools=[directory_read_tool, file_read_tool, search_tool],
+            tools=[file_read_tool, search_tool],
             agent=SalesAgents().sales_rep_agent()
         )
 
@@ -146,4 +145,5 @@ inputs = {
 result = crew.kickoff(inputs=inputs)
 
 # Print the result
-st.write(result)
+# st.write(result)
+print(result)
