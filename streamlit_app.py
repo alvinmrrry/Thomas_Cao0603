@@ -13,7 +13,10 @@ import os
 # Initialize the ChatGroq model
 openai.api_key = 'sk-bmzsXFgX4CgCUCoC22IgfGhRomJLvd2M8EI74JuNWij3YRPJ'
 openai.api_base = 'https://api.agicto.cn/v1'
-llm = openai.Model('gpt-4o-mini')
+llm = openai.ChatCompletion.create(
+    model="gpt-4o-mini",
+    messages=[{ "role": "user", "content": "Hello world" }]
+)
 
 # Define the agents
 class SalesAgents:
