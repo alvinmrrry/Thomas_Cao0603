@@ -8,6 +8,11 @@ import io
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
 from langchain_groq import ChatGroq
+# Initialize the ChatGroq model
+llm = ChatGroq(
+    api_key="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",
+    model="mixtral-8x7b-32768"
+)
 
 client = Groq(api_key=groq_api_key)
 
