@@ -92,7 +92,7 @@ class SalesTasks:
                 "A detailed report on {lead_name}, covering company background, key personnel, recent projects, and specific needs related to estimating services. "
                 "Identify potential areas where our estimating solutions can add value and propose customized engagement strategies."
             ),
-            tools=[directory_read_tool, file_read_tool, search_tool],
+            tools=[],
             agent=SalesAgents().sales_rep_agent()
         )
 
