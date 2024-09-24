@@ -5,6 +5,10 @@ import base64
 from PIL import Image
 import io
 
+from crewai import Agent, Task, Crew, Process
+from langchain_community.tools import DuckDuckGoSearchRun
+from langchain.agents import Tool
+
 client = Groq(api_key=groq_api_key)
 
 llava_model = 'llava-v1.5-7b-4096-preview'
@@ -72,8 +76,6 @@ if uploaded_file:
     st.write('Short story:')
     st.write(short_story)
 
-from crewai import Agent, Task, Crew, Process
-from langchain_community.tools import DuckDuckGoSearchRun
-from langchain.agents import Tool
+
 
 st.write('ok')
