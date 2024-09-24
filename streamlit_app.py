@@ -6,8 +6,8 @@ from PIL import Image
 import io
 
 from crewai import Agent, Task, Crew, Process
-from langchain_community.tools import DuckDuckGoSearchRun
-from langchain.agents import Tool
+from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
+from langchain_groq import ChatGroq
 
 client = Groq(api_key=groq_api_key)
 
