@@ -8,7 +8,7 @@ import io
 SERPER_API_KEY = "3c75331dffc120acfa03b3bc75a4fbb3202c4927"
 from openai import OpenAI
 from crewai import Agent, Task, Crew, Process
-from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseToo
+from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool, BaseTool
 import os
 # Initialize the ChatGroq model
 os.environ["OPENAI_API_BASE"] = 'https://api.agicto.cn/v1'
