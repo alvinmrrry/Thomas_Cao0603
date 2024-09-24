@@ -12,7 +12,7 @@ from langchain_groq import ChatGroq
 # Initialize the ChatGroq model
 llm = ChatGroq(
     api_key=groq_api_key,
-    model="llama-3.1-70b-versatile"
+    model="Groq/llama-3.1-70b-versatile"
 )
 # Define the agents
 class SalesAgents:
