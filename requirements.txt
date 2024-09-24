@@ -1,9 +1,9 @@
 streamlit
-crewai
-crewai_tools
+crewai==0.28.8
+crewai_tools==0.1.6
 groq
 langchain
 langchain_groq
 google-search-results
-langchain_community
+langchain_community==0.0.29
 sqlite3>=3.35
