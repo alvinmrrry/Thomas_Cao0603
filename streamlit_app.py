@@ -131,7 +131,7 @@ crew = Crew(
         SalesTasks().lead_profiling_task(),
         SalesTasks().personalized_outreach_task()
     ],
-    verbose=2,
+    verbose=True,
     memory=True
 )
 inputs = {
