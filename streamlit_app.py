@@ -4,17 +4,17 @@ import streamlit as st
 import base64
 from PIL import Image
 import io
-import openai
+from click import prompt
+from openai import OpenAI
 
 # Initialize Groq client
 client = Groq(api_key=groq_api_key)
 
 # Define models
-llava_model = 'llava-v1.5-7b-4096-preview'
 llama31_model = 'llama-3.1-70b-versatile'
 
 # Initialize OpenAI client
-openai_client = openai.OpenAI(
+openai_client = OpenAI(
     base_url="https://api-inference.huggingface.co/v1/",
     api_key="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"
 )
