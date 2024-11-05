@@ -24,7 +24,7 @@ uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
 
 def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=500):
 
-    url = "https://thumbnail0.baidupcs.com/thumbnail/2546af8f1i476559742cecc04edd627a?fid=1102114614555-250528-310488663429320&time=1730775600&rt=sh&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-BMm4%2BWJYjSefltN8GSLEysbU6uQ%3D&expires=8h&chkv=0&chkbd=0&chkpc=&dp-logid=260304346909764554&dp-callid=0&file_type=0&size=c710_u400&quality=100&vuk=-&ft=video"
+    url = "https://thumbnail1.baidupcs.com/thumbnail/a82217d32q0ec37513885753ad73d44c?fid=1102114614555-250528-310234319461360&rt=pr&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-IYZliKb8Yz4MFRMj7%2bFb7eoI%2bZQ%3d&expires=8h&chkbd=0&chkv=0&dp-logid=260284334972795143&dp-callid=0&time=1730775600&size=c1383_u864&quality=90&vuk=1102114614555&ft=image&autopolicy=1"
 
     prompt = '''
     describe the image
