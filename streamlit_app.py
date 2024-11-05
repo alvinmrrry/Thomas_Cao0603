@@ -5,7 +5,7 @@ import base64
 from PIL import Image
 import io
 
-client = Groq(api_key=groq_api_key)
+client = Groq(api_key='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')
 
 llava_model = 'llava-v1.5-7b-4096-preview'
 llama31_model='llama-3.1-70b-versatile'

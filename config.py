@@ -1,2 +1,2 @@
-groq_api_key = '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'
+groq_api_key = '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'
 search_api_key = '2203d27aa32a1d92275134fb632bf009714b2476'
