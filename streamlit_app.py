@@ -4,13 +4,20 @@ import streamlit as st
 import base64
 from PIL import Image
 import io
-from click import prompt
-from openai import OpenAI
+import openai
 
-client = Groq(api_key='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')
+# Initialize Groq client
+client = Groq(api_key=groq_api_key)
 
+# Define models
 llava_model = 'llava-v1.5-7b-4096-preview'
-llama31_model='llama-3.1-70b-versatile'
+llama31_model = 'llama-3.1-70b-versatile'
+
+# Initialize OpenAI client
+openai_client = openai.OpenAI(
+    base_url="https://api-inference.huggingface.co/v1/",
+    api_key="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"
+)
 
 st.title('Describe the image')
 uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
@@ -29,11 +36,6 @@ def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Ins
     str: 图片的描述。
     """
 
-    client = OpenAI(
-        base_url="https://api-inference.huggingface.co/v1/",
-        api_key="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"
-    )
-
     prompt = "describe the image"
 
     messages = [
@@ -41,7 +43,7 @@ def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Ins
         {"role": "system", "content": f"base64://{base64_image}"}
     ]
 
-    response = client.chat.completions.create(
+    response = openai_client.chat.completions.create(
         model=model_name,
         messages=messages,
         max_tokens=max_tokens
@@ -55,7 +57,7 @@ def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Ins
 
 
 if uploaded_file:
-    
+
     # Open the image file
     image = Image.open(uploaded_file)
 
@@ -69,12 +71,12 @@ if uploaded_file:
     # Encode the resized image to base64
     base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-    # image to text function
+    # Image to text function
     image_description = describe_image(base64_image)
     st.write(image_description)
 
-    # short story generation funtion
-    def short_story(client, image_description):
+    # Short story generation function
+    def short_story(image_description, model_name=llama31_model):
         chat_completion = client.chat.completions.create(
             messages = [
                 {"role": "system",
@@ -82,12 +84,12 @@ if uploaded_file:
                 {"role": "user",
                 "content": image_description}
             ],
-            model = llama31_model
+            model = model_name
         )
-        
+
         return chat_completion.choices[0].message.content
 
-    # signle image processing 
-    short_story = short_story(client, image_description)
+    # Single image processing 
+    short_story_text = short_story(image_description)
     st.write('Short story:')
-    st.write(short_story)
+    st.write(short_story_text)
