@@ -24,7 +24,7 @@ uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
 
 def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=500):
 
-    url = "https://unsplash.com/photos/silver-imac-with-keyboard-and-trackpad-inside-room-KE0nC8-58MQ"
+    url = "https://thumbnail0.baidupcs.com/thumbnail/2546af8f1i476559742cecc04edd627a?fid=1102114614555-250528-310488663429320&time=1730775600&rt=sh&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-BMm4%2BWJYjSefltN8GSLEysbU6uQ%3D&expires=8h&chkv=0&chkbd=0&chkpc=&dp-logid=260304346909764554&dp-callid=0&file_type=0&size=c710_u400&quality=100&vuk=-&ft=video"
 
     prompt = '''
     describe the image
