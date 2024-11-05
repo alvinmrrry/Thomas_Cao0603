@@ -24,13 +24,16 @@ uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
 
 def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=500):
 
-    prompt = "describe the image"
+    url = "https://unsplash.com/photos/silver-imac-with-keyboard-and-trackpad-inside-room-KE0nC8-58MQ"
+
+    prompt = '''
+    describe the image
+    '''
 
     messages = [
-        {"role": "user", "content": prompt},
-        {"role": "system", "content": f"base64://{base64_image}"}
+        {"role": "user", "content": prompt},  # First message asking for a description
+        {"role": "system", "content": url}  # Image URL as a separate message
     ]
-
     response = openai_client.chat.completions.create(
         model=model_name,
         messages=messages,
