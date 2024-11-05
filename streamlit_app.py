@@ -49,12 +49,12 @@ if uploaded_file:
     # Open the image file
     image = Image.open(uploaded_file)
 
-    # Resize the image to a smaller size (e.g., 800x600)
-    image.thumbnail((800, 600))
+    # Resize the image to a smaller size (e.g., 400x300)
+    image.thumbnail((400, 300))
 
-    # Save the resized image to a bytes buffer
+    # Compress the image to reduce the file size
     buffer = io.BytesIO()
-    image.save(buffer, format="JPEG")
+    image.save(buffer, format="JPEG", quality=50)
 
     # Encode the resized image to base64
     base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
@@ -63,21 +63,21 @@ if uploaded_file:
     image_description = describe_image(base64_image)
     st.write(image_description)
 
-    # # Short story generation function
-    # def short_story(image_description, model_name=llama31_model):
-    #     chat_completion = client.chat.completions.create(
-    #         messages = [
-    #             {"role": "system",
-    #             "content": "You are a children's book author. Write a short story based on the image description."},
-    #             {"role": "user",
-    #             "content": image_description}
-    #         ],
-    #         model = model_name
-    #     )
+    # Short story generation function
+    def short_story(image_description, model_name=llama31_model):
+        chat_completion = client.chat.completions.create(
+            messages = [
+                {"role": "system",
+                "content": "You are a children's book author. Write a short story based on the image description."},
+                {"role": "user",
+                "content": image_description}
+            ],
+            model = model_name
+        )
 
-    #     return chat_completion.choices[0].message.content
+        return chat_completion.choices[0].message.content
 
-    # # Single image processing 
-    # short_story_text = short_story(image_description)
-    # st.write('Short story:')
-    # st.write(short_story_text)
+    # Single image processing 
+    short_story_text = short_story(image_description)
+    st.write('Short story:')
+    st.write(short_story_text)
