@@ -4,8 +4,6 @@ import streamlit as st
 import base64
 from PIL import Image
 import io
-from click import prompt
-from openai import OpenAI
 
 client = Groq(api_key='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')
 
@@ -14,45 +12,6 @@ llama31_model='llama-3.1-70b-versatile'
 
 st.title('Describe the image')
 uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
-
-def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=5000):
-    """
-    使用 OpenAI 的 Llama 模型描述一张图片。
-
-    Args:
-    base64_image (str): 图片的 base64 编码。
-    api_key (str): OpenAI 的 API 密钥。
-    model_name (str): 使用的模型名称 (默认为 "meta-llama/Llama-3.2-11B-Vision-Instruct")。
-    max_tokens (int): 响应的最大长度 (默认为 5000)。
-
-    Returns:
-    str: 图片的描述。
-    """
-
-    client = OpenAI(
-        base_url="https://api-inference.huggingface.co/v1/",
-        api_key="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"
-    )
-
-    prompt = "describe the image"
-
-    messages = [
-        {"role": "user", "content": prompt},
-        {"role": "system", "content": f"base64://{base64_image}"}
-    ]
-
-    response = client.chat.completions.create(
-        model=model_name,
-        messages=messages,
-        max_tokens=max_tokens
-    )
-
-    if response.choices:
-        return response.choices[0].message.content
-    else:
-        return None
-
-
 
 if uploaded_file:
     
@@ -70,7 +29,28 @@ if uploaded_file:
     base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
     # image to text function
-    image_description = describe_image(base64_image)
+    def image_to_text(client, model, base64_image, prompt):
+        try:
+            chat_completion = client.chat.completions.create(
+                messages=[
+                    {"role": "user",
+                     "content": [
+                         {"type": "text", "text": prompt},
+                         {"type": "image_url",
+                          "image_url": {
+                              "url": f"data:image/jpg;base64,{base64_image}",
+                          }}
+                     ]
+                     }
+                ],
+                model=model
+            )
+        except Exception as e:
+            raise RuntimeError(f"Error calling Groq API: {e}") from e
+        return chat_completion.choices[0].message.content
+
+    prompt = 'Describe the scene depicted in the image, including the facial expressions of the people and the background. What is the main subject of the image and how does it relate to the rest of the scene?'
+    image_description = image_to_text(client, llava_model, base64_image, prompt)
     st.write(image_description)
 
     # short story generation funtion
