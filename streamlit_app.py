@@ -22,19 +22,7 @@ openai_client = OpenAI(
 st.title('Describe the image')
 uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
 
-def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=5000):
-    """
-    使用 OpenAI 的 Llama 模型描述一张图片。
-
-    Args:
-    base64_image (str): 图片的 base64 编码。
-    api_key (str): OpenAI 的 API 密钥。
-    model_name (str): 使用的模型名称 (默认为 "meta-llama/Llama-3.2-11B-Vision-Instruct")。
-    max_tokens (int): 响应的最大长度 (默认为 5000)。
-
-    Returns:
-    str: 图片的描述。
-    """
+def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=2000):
 
     prompt = "describe the image"
 
