@@ -24,7 +24,7 @@ uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
 
 def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=500):
 
-    url = "https://unsplash.com/photos/a-couple-of-small-plastic-animals-sitting-on-top-of-a-table-NP8Go-KkeSs"
+    url = "https://unsplash.com/photos/a-woman-sitting-at-a-table-with-headphones-on-8cOgBbaykr8"
 
     prompt = '''
     describe the image
