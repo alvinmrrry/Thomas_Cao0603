@@ -4,70 +4,57 @@ import streamlit as st
 import base64
 from PIL import Image
 import io
-from click import prompt
-from openai import OpenAI
 
-# Initialize Groq client
-client = Groq(api_key=groq_api_key)
+client = Groq(api_key='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')
 
-# Define models
-llama31_model = 'llama-3.1-70b-versatile'
-
-# Initialize OpenAI client
-openai_client = OpenAI(
-    base_url="https://api-inference.huggingface.co/v1/",
-    api_key="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"
-)
+llava_model = 'llava-v1.5-7b-4096-preview'
+llama31_model='llama-3.1-70b-versatile'
 
 st.title('Describe the image')
 uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
 
-def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=500):
-
-    url = "https://unsplash.com/photos/a-woman-sitting-at-a-table-with-headphones-on-8cOgBbaykr8"
-
-    prompt = '''
-    describe the image
-    '''
-
-    messages = [
-        {"role": "user", "content": prompt},  # First message asking for a description
-        {"role": "system", "content": url}  # Image URL as a separate message
-    ]
-    response = openai_client.chat.completions.create(
-        model=model_name,
-        messages=messages,
-        max_tokens=max_tokens
-    )
-
-    if response.choices:
-        return response.choices[0].message.content
-    else:
-        return None
-
-
-
 if uploaded_file:
-
+    
     # Open the image file
     image = Image.open(uploaded_file)
 
-    # Resize the image to a smaller size (e.g., 400x300)
-    image.thumbnail((400, 300))
+    # Resize the image to a smaller size (e.g., 800x600)
+    image.thumbnail((800, 600))
 
-    # Compress the image to reduce the file size
+    # Save the resized image to a bytes buffer
     buffer = io.BytesIO()
-    image.save(buffer, format="JPEG", quality=50)
+    image.save(buffer, format="JPEG")
 
     # Encode the resized image to base64
     base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-    # Image to text function
-    image_description = describe_image(base64_image)
+    # image to text function
+    def image_to_text(client, model, base64_image, prompt):
+        try:
+            chat_completion = client.chat.completions.create(
+                messages=[
+                    {"role": "user",
+                     "content": [
+                         {"type": "text", "text": prompt},
+                         {"type": "image_url",
+                          "image_url": {
+                              "url": f"data:image/jpg;base64,{base64_image}",
+                          }}
+                     ]
+                     }
+                ],
+                model=model
+            )
+        except Exception as e:
+            raise RuntimeError(f"Error calling Groq API: {e}") from e
+        return chat_completion.choices[0].message.content
+
+    prompt = 'Describe the image'
+    image_description = image_to_text(client, llava_model, base64_image, prompt)
     st.write(image_description)
 
-    # Short story generation function
-    def short_story(image_description, model_name=llama31_model):
+    # short story generation funtion
+    def short_story(client, image_description):
         chat_completion = client.chat.completions.create(
             messages = [
                 {"role": "system",
@@ -75,12 +62,12 @@ if uploaded_file:
                 {"role": "user",
                 "content": image_description}
             ],
-            model = model_name
+            model = llama31_model
         )
-
+        
         return chat_completion.choices[0].message.content
 
-    # Single image processing 
-    short_story_text = short_story(image_description)
+    # signle image processing 
+    short_story = short_story(client, image_description)
     st.write('Short story:')
-    st.write(short_story_text)
+    st.write(short_story)
