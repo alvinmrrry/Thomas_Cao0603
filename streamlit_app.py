@@ -22,7 +22,7 @@ openai_client = OpenAI(
 st.title('Describe the image')
 uploaded_file = st.file_uploader("Choose a JPG file", type=["jpg", "jpeg"])
 
-def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=2000):
+def describe_image(base64_image, model_name="meta-llama/Llama-3.2-11B-Vision-Instruct", max_tokens=500):
 
     prompt = "describe the image"
 
