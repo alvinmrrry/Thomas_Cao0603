@@ -63,21 +63,21 @@ if uploaded_file:
     image_description = describe_image(base64_image)
     st.write(image_description)
 
-    # Short story generation function
-    def short_story(image_description, model_name=llama31_model):
-        chat_completion = client.chat.completions.create(
-            messages = [
-                {"role": "system",
-                "content": "You are a children's book author. Write a short story based on the image description."},
-                {"role": "user",
-                "content": image_description}
-            ],
-            model = model_name
-        )
+    # # Short story generation function
+    # def short_story(image_description, model_name=llama31_model):
+    #     chat_completion = client.chat.completions.create(
+    #         messages = [
+    #             {"role": "system",
+    #             "content": "You are a children's book author. Write a short story based on the image description."},
+    #             {"role": "user",
+    #             "content": image_description}
+    #         ],
+    #         model = model_name
+    #     )
 
-        return chat_completion.choices[0].message.content
+    #     return chat_completion.choices[0].message.content
 
-    # Single image processing 
-    short_story_text = short_story(image_description)
-    st.write('Short story:')
-    st.write(short_story_text)
+    # # Single image processing 
+    # short_story_text = short_story(image_description)
+    # st.write('Short story:')
+    # st.write(short_story_text)
