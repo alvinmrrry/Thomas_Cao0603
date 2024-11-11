@@ -49,7 +49,7 @@ if uploaded_file:
             raise RuntimeError(f"Error calling Groq API: {e}") from e
         return chat_completion.choices[0].message.content
 
-    prompt = 'Describe the image'
+    prompt = 'Describe the image as detail as possible'
     image_description = image_to_text(client, llava_model, base64_image, prompt)
     st.write(image_description)
 
