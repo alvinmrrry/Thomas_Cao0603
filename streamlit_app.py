@@ -57,7 +57,7 @@ async def get_player_goals(_: RunContext, player_name: str) -> str:
 @agent.system_prompt
 def name_matching_instruction(_: RunContext) -> str:
     return """CRITICAL INSTRUCTIONS: DO NOT attempt to correct player names or suggest full names. 
-    Use the exact input name as provided to query the tool."""
+    Only use the input name as provided to query the tool."""
 
 # async def init_database():
 #     conn = sqlite3.connect('players.db')
