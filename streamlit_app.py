@@ -24,7 +24,7 @@ def retry_with_backoff(func, max_retries=10, initial_delay=3):
             except SDKError as e: # type: ignore
                 if "rate limit" in str(e).lower() and attempt < max_retries - 1:
                     await asyncio.sleep(delay)
-                    delay *= 2
+                    delay *= 1.2
                 else:
                     raise
     return wrapper
