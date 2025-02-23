@@ -59,27 +59,27 @@ def name_matching_instruction(_: RunContext) -> str:
     return """CRITICAL INSTRUCTIONS: DO NOT attempt to correct player names or suggest full names. 
     Use the exact input name as provided to query the tool."""
 
-async def init_database():
-    conn = sqlite3.connect('players.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS players
-                 (name TEXT PRIMARY KEY, goals INTEGER)''')
+# async def init_database():
+#     conn = sqlite3.connect('players.db')
+#     c = conn.cursor()
+#     c.execute('''CREATE TABLE IF NOT EXISTS players
+#                  (name TEXT PRIMARY KEY, goals INTEGER)''')
     
-    players = [
-        ('lionel messi', 100),
-        ('lionel messy', 102),
-        ('cristian fei', 66),
-        ('cristiano ronaldo', 108),
-        ('tom charlie', 10),
-        ('tommy lee', 30),
-        ('tomorrow', 50),
-    ]
+#     players = [
+#         ('lionel messi', 100),
+#         ('lionel messy', 102),
+#         ('cristian fei', 66),
+#         ('cristiano ronaldo', 108),
+#         ('tom charlie', 10),
+#         ('tommy lee', 30),
+#         ('tomorrow', 50),
+#     ]
     
-    c.executemany('INSERT OR REPLACE INTO players VALUES (?, ?)', players)
-    conn.commit()
-    conn.close()
+#     c.executemany('INSERT OR REPLACE INTO players VALUES (?, ?)', players)
+#     conn.commit()
+#     conn.close()
 
-asyncio.run(init_database())
+# asyncio.run(init_database())
 
 async def get_consistent_response(prompt, max_attempts=3):
     responses = []
