@@ -80,27 +80,25 @@ async def init_database():
 
 asyncio.run(init_database())
 
-async def get_consistent_response(prompt, num_attempts=4):
+async def get_consistent_response(prompt, max_attempts=10):
     responses = []
-    tasks = []
+    last_response = None
+    attempt = 0
     
     retry_agent_run = retry_with_backoff(agent.run)
     
-    for _ in range(num_attempts):
-        task = retry_agent_run(prompt)
-        tasks.append(task)
-    
-    try:
-        responses = await asyncio.gather(*tasks)
-        responses = [r.data for r in responses]
+    while attempt < max_attempts:
+        response = await retry_agent_run(prompt)
+        response = response.data
+        responses.append(response)
         
-        if len(set(responses)) == 1:
-            # print("All responses were consistent")
-            return responses[0]
-        else:
-            return max(set(responses), key=responses.count)
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
+        if last_response is not None and response == last_response:
+            return response
+        last_response = response
+        attempt += 1
+    
+    # 如果尝试了 max_attempts 次仍然没有得到两次相同的结果，就返回最常见的结果
+    return max(set(responses), key=responses.count)
 
 # Streamlit app
 def main():
