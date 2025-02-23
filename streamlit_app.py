@@ -7,7 +7,7 @@ from functools import wraps
 
 # Create a Groq model
 # model = GroqModel('llama-3.3-70b-versatile', api_key='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')
-model = GroqModel('llama-3.2-3b-preview', api_key='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')
+model = GroqModel('llama-3.1-8b-instant', api_key='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')
 agent = Agent(model)
 
 # Custom exception for rate limit errors
