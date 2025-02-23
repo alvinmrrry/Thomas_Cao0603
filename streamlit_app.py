@@ -14,7 +14,7 @@ agent = Agent(model)
 class SDKError(Exception):
     pass
 
-def retry_with_backoff(func, max_retries=10, initial_delay=2):
+def retry_with_backoff(func, max_retries=10, initial_delay=3):
     @wraps(func)
     async def wrapper(*args, **kwargs):
         delay = initial_delay
