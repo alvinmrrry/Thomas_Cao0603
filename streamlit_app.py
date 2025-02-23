@@ -1,7 +1,9 @@
 import streamlit as st
+import sqlite3
 import asyncio
 from pydantic_ai import Agent
 from pydantic_ai.models.groq import GroqModel
+from functools import wraps
 
 # Create a Groq model
 model = GroqModel('llama-3.3-70b-versatile', api_key='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')
@@ -15,7 +17,7 @@ def retry_with_backoff(func, max_retries=10, initial_delay=3):
         for attempt in range(max_retries):
             try:
                 return await func(*args, **kwargs)
-            except SDKError as e:
+            except Exception as e:
                 if "rate limit" in str(e).lower() and attempt < max_retries - 1:
                     await asyncio.sleep(delay)
                     delay *= 2
@@ -23,22 +25,39 @@ def retry_with_backoff(func, max_retries=10, initial_delay=3):
                     raise
     return wrapper
 
-# Define a function to get a consistent response from the agent
-async def get_consistent_response(prompt, num_attempts=3):
-    responses = []
-    tasks = []
-    
-    for _ in range(num_attempts):
-        task = retry_with_backoff(agent.run)(prompt)
-        tasks.append(task)
-    
-    responses = await asyncio.gather(*tasks)
-    responses = [r.data for r in responses]
-    
-    if len(set(responses)) == 1:
-        return responses[0]
+@retry_with_backoff
+async def fetch_data_from_database(player_name):
+    conn = sqlite3.connect('players.db')
+    c = conn.cursor()
+    c.execute('SELECT goals FROM players WHERE name = ?', (player_name,))
+    result = c.fetchone()
+    conn.close()
+    if result:
+        return result[0]
     else:
-        return max(set(responses), key=responses.count)
+        return f"Player {player_name} not found in database."
+
+async def init_database():
+    conn = sqlite3.connect('players.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS players
+                 (name TEXT PRIMARY KEY, goals INTEGER)''')
+    
+    players = [
+        ('lionel messi', 100),
+        ('lionel messy', 102),
+        ('cristian fei', 66),
+        ('cristiano ronaldo', 108),
+        ('Tom Charlie', 10),
+        ('Tommy Lee', 30),
+        ('Tomorrow', 50),
+    ]
+    
+    c.executemany('INSERT OR REPLACE INTO players VALUES (?, ?)', players)
+    conn.commit()
+    conn.close()
+
+asyncio.run(init_database())
 
 # Streamlit app
 def main():
@@ -46,20 +65,14 @@ def main():
     st.write("Get answers from fast language models")
 
     # Get user input
-    st.header("Enter a question")
-    message = st.text_area("")
-
-    # Get model selection
-    st.header("Select a model")
-    model_options = ["llama-3.3-70b-versatile"]
-    model = st.selectbox("Model", options=model_options)
+    st.header("Enter a player's name")
+    player_name = st.text_area("")
 
     # Get chat completion
-    if st.button("Get Answer"):
-        prompt = message
-        response = asyncio.run(get_consistent_response(prompt))
-        st.write("Answer:")
-        st.write(response)
+    if st.button("Get Data"):
+        result = asyncio.run(fetch_data_from_database(player_name))
+        st.write("Goals:")
+        st.write(result)
 
 if __name__ == "__main__":
     main()
