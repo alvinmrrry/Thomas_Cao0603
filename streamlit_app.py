@@ -14,7 +14,7 @@ agent = Agent(model)
 class SDKError(Exception):
     pass
 
-def retry_with_backoff(func, max_retries=10, initial_delay=3):
+def retry_with_backoff(func, max_retries=10, initial_delay=2):
     @wraps(func)
     async def wrapper(*args, **kwargs):
         delay = initial_delay
@@ -24,7 +24,7 @@ def retry_with_backoff(func, max_retries=10, initial_delay=3):
             except SDKError as e: # type: ignore
                 if "rate limit" in str(e).lower() and attempt < max_retries - 1:
                     await asyncio.sleep(delay)
-                    delay *= 1.1
+                    delay *= 1.5
                 else:
                     raise
     return wrapper
@@ -81,7 +81,7 @@ def name_matching_instruction(_: RunContext) -> str:
 
 # asyncio.run(init_database())
 
-async def get_consistent_response(prompt, max_attempts=3):
+async def get_consistent_response(prompt, max_attempts=4):
     responses = []
     last_response = None
     attempt = 0
