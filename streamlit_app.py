@@ -80,7 +80,7 @@ async def init_database():
 
 asyncio.run(init_database())
 
-async def get_consistent_response(prompt, num_attempts=3):
+async def get_consistent_response(prompt, num_attempts=5):
     responses = []
     tasks = []
     
