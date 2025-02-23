@@ -48,9 +48,9 @@ async def init_database():
         ('lionel messy', 102),
         ('cristian fei', 66),
         ('cristiano ronaldo', 108),
-        ('Tom Charlie', 10),
-        ('Tommy Lee', 30),
-        ('Tomorrow', 50),
+        ('tom charlie', 10),
+        ('tommy lee', 30),
+        ('tomorrow', 50),
     ]
     
     c.executemany('INSERT OR REPLACE INTO players VALUES (?, ?)', players)
