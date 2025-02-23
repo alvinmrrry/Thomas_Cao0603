@@ -1,13 +1,17 @@
 import streamlit as st
 import sqlite3
 import asyncio
-from pydantic_ai import Agent,RunContext
+from pydantic_ai import Agent, RunContext
 from pydantic_ai.models.groq import GroqModel
 from functools import wraps
 
 # Create a Groq model
 model = GroqModel('llama-3.3-70b-versatile', api_key='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')
 agent = Agent(model)
+
+# Custom exception for rate limit errors
+class SDKError(Exception):
+    pass
 
 def retry_with_backoff(func, max_retries=10, initial_delay=3):
     @wraps(func)
@@ -51,7 +55,7 @@ async def get_player_goals(_: RunContext, player_name: str) -> str:
 
 @agent.system_prompt
 def name_matching_instruction(_: RunContext) -> str:
-    return """CRITICAL INSTRUCTION: DO NOT attempt to correct player names or suggest full names. 
+    return """CRITICAL INSTRUCTIONS: DO NOT attempt to correct player names or suggest full names. 
     Use the exact input name as provided to query the tool."""
 
 async def init_database():
@@ -80,38 +84,45 @@ async def get_consistent_response(prompt, num_attempts=3):
     responses = []
     tasks = []
     
+    retry_agent_run = retry_with_backoff(agent.run)
+    
     for _ in range(num_attempts):
-        task = retry_with_backoff(agent.run)(prompt)
+        task = retry_agent_run(prompt)
         tasks.append(task)
     
-    responses = await asyncio.gather(*tasks)
-    responses = [r.data for r in responses]
-    
-    if len(set(responses)) == 1:
-        # print("All responses were consistent")
-        return responses[0]
-    else:
-        return max(set(responses), key=responses.count)
-
+    try:
+        responses = await asyncio.gather(*tasks)
+        responses = [r.data for r in responses]
+        
+        if len(set(responses)) == 1:
+            # print("All responses were consistent")
+            return responses[0]
+        else:
+            return max(set(responses), key=responses.count)
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
 
 # Streamlit app
 def main():
-    st.title("Groq AI Chat Completion")
-    st.write("Get answers from fast language models")
+    try:
+        st.title("Groq AI Chat Completion")
+        st.write("Get answers from fast language models")
 
-    # Get user input
-    st.header("Enter a player's name")
-    player_name = st.text_area("").strip().lower()
+        # Get user input
+        st.header("Enter a player's name")
+        player_name = st.text_area("").strip().lower()
 
-    # Get chat completion
-    if st.button("Get Data"):
-        if player_name:
-            prompt = f"Get the number of goals scored by {player_name}. Use the get_player_goals tool."
-            result = asyncio.run(get_consistent_response(prompt))
-            st.write("Goals:")
-            st.write(result.data)
-        else:
-            st.write("Please enter a player's name.")
+        # Get chat completion
+        if st.button("Get Data"):
+            if player_name:
+                prompt = f"Get the number of goals scored by {player_name}. Use the get_player_goals tool."
+                result = asyncio.run(get_consistent_response(prompt))
+                st.write("Goals:")
+                st.write(result)
+            else:
+                st.write("Please enter a player's name.")
+    except Exception as e:
+        st.write(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
     main()
