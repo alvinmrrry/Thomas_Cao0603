@@ -24,7 +24,7 @@ def retry_with_backoff(func, max_retries=10, initial_delay=3):
     return wrapper
 
 @agent.tool
-async def get_player_goals(_: Agent.Context, player_name: str) -> str:
+async def get_player_goals(player_name: str) -> str:
     player_name = player_name.lower()
     
     conn = sqlite3.connect('players.db')
@@ -49,7 +49,7 @@ async def get_player_goals(_: Agent.Context, player_name: str) -> str:
     return f"Player {player_name} not found in database."
 
 @agent.system_prompt
-def name_matching_instruction(_: Agent.Context) -> str:
+def name_matching_instruction() -> str:
     return """CRITICAL INSTRUCTION: DO NOT attempt to correct player names or suggest full names. 
     Use the exact input name as provided to query the tool."""
 
@@ -72,24 +72,6 @@ async def init_database():
     c.executemany('INSERT OR REPLACE INTO players VALUES (?, ?)', players)
     conn.commit()
     conn.close()
-
-@agent.system_action
-async def get_consistent_response(_: Agent.Context, prompt: str, num_attempts=3) -> str:
-    responses = []
-    tasks = []
-    
-    for _ in range(num_attempts):
-        task = agent.run(prompt)
-        tasks.append(task)
-    
-    responses = await asyncio.gather(*tasks)
-    responses = [r.data for r in responses]
-    
-    if len(set(responses)) == 1:
-        # print("All responses were consistent")
-        return responses[0]
-    else:
-        return max(set(responses), key=responses.count)
 
 asyncio.run(init_database())
 
