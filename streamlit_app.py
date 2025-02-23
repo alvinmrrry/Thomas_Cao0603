@@ -81,7 +81,7 @@ async def init_database():
 
 asyncio.run(init_database())
 
-async def get_consistent_response(prompt, max_attempts=10):
+async def get_consistent_response(prompt, max_attempts=5):
     responses = []
     last_response = None
     attempt = 0
