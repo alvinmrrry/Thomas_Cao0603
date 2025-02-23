@@ -105,10 +105,10 @@ async def get_consistent_response(prompt, max_attempts=10):
 def main():
     try:
         st.title("Groq AI Chat Completion")
-        st.write("Get answers from fast language models")
+        st.write("Get answers from database based on fast language models")
 
         # Get user input
-        st.header("Enter a player's name")
+        # st.header("Enter a player's name")
         player_name = st.text_input("Enter a player's name")
 
         if player_name:
