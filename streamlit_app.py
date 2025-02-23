@@ -66,7 +66,7 @@ def main():
 
     # Get user input
     st.header("Enter a player's name")
-    player_name = st.text_area("")
+    player_name = st.text_area("").lower()
 
     # Get chat completion
     if st.button("Get Data"):
