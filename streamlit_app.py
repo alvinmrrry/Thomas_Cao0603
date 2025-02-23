@@ -6,7 +6,7 @@ from pydantic_ai.models.groq import GroqModel
 from functools import wraps
 
 # Create a Groq model
-# model = GroqModel('llama-3.3-70b-specdec', api_key='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')
+# model = GroqModel('llama-3.3-70b-versatile', api_key='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')
 model = GroqModel('deepseek-r1-distill-qwen-32b', api_key='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')
 agent = Agent(model)
 
