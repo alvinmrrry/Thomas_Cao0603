@@ -90,18 +90,29 @@ async def get_consistent_response(prompt, max_attempts=3):
     
     while attempt < max_attempts:
         response = await retry_agent_run(prompt)
-        response = response.data
-        responses.append(response)
+        response_data = response.data
         
-        if last_response is not None and response == last_response:
-            return response
-        last_response = response
+        # Check if the response contains a tool call result and extract the actual goal count
+        if isinstance(response_data, dict) and 'tool_call' in response_data:
+            tool_response = response_data['tool_call']
+            # Assuming tool_response contains the goal count in a 'goals' field or similar
+            goals = tool_response.get('goals', None)
+            if goals is not None:
+                responses.append(goals)
+        else:
+            # If it's not a tool call, just append the raw response
+            responses.append(response_data)
+        
+        # Check if the response is consistent
+        if last_response is not None and response_data == last_response:
+            return response_data
+        
+        last_response = response_data
         attempt += 1
     
-    # 如果尝试了 max_attempts 次仍然没有得到两次相同的结果，就返回最常见的结果
+    # If we haven't found consistent responses, return the most frequent response
     return max(set(responses), key=responses.count)
 
-# Streamlit app
 # Streamlit app
 def main():
     try:
