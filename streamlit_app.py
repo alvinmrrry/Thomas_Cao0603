@@ -116,8 +116,6 @@ def main():
             result = asyncio.run(get_consistent_response(prompt))
             st.write("Goals:")
             st.write(result)
-        else:
-            st.write("Please enter a player's name.")
     except Exception as e:
         st.write(f"An error occurred: {str(e)}")
 
