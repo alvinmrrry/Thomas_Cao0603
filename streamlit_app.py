@@ -101,6 +101,7 @@ async def get_consistent_response(prompt, max_attempts=10):
     return max(set(responses), key=responses.count)
 
 # Streamlit app
+# Streamlit app
 def main():
     try:
         st.title("Groq AI Chat Completion")
@@ -108,17 +109,15 @@ def main():
 
         # Get user input
         st.header("Enter a player's name")
-        player_name = st.text_area("").strip().lower()
+        player_name = st.text_area("Enter a player's name", height=1)
 
-        # Get chat completion
-        if st.button("Get Data"):
-            if player_name:
-                prompt = f"Get the number of goals scored by {player_name}. Use the get_player_goals tool."
-                result = asyncio.run(get_consistent_response(prompt))
-                st.write("Goals:")
-                st.write(result)
-            else:
-                st.write("Please enter a player's name.")
+        if player_name:
+            prompt = f"Get the number of goals scored by {player_name}. Use the get_player_goals tool."
+            result = asyncio.run(get_consistent_response(prompt))
+            st.write("Goals:")
+            st.write(result)
+        else:
+            st.write("Please enter a player's name.")
     except Exception as e:
         st.write(f"An error occurred: {str(e)}")
 
