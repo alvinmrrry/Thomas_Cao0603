@@ -109,7 +109,7 @@ def main():
 
         # Get user input
         st.header("Enter a player's name")
-        player_name = st.text_area("Enter a player's name", height=1)
+        player_name = st.text_input("Enter a player's name")
 
         if player_name:
             prompt = f"Get the number of goals scored by {player_name}. Use the get_player_goals tool."
