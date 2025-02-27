@@ -1,23 +1,25 @@
+import os
 import numpy as np
 import streamlit as st
-import google.generativeai as genai
 from PIL import Image
-from dotenv import load_dotenv
 from io import BytesIO
+from google import genai
+from google.genai import types
 
-# Load environment variables
-load_dotenv()
+
 
 # Initialize the Gemini model with the specific version
 model = genai.GenerativeModel('gemini-2.0-flash')
 genai.configure(api_key='AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA')
+# Initialize the GenAI client
+client = genai.Client()
 
 def process_image(image_bytes, prompt):
     try:
         # Prepare the image
         image = Image.open(BytesIO(image_bytes))
         image = image.convert('RGB')
-        # Resize to the model's expected input size (e.g., 224x224 or 256x256)
+        # Resize to the model's expected input size (e.g., 224x224)
         image = image.resize((224, 224))
         image_array = np.array(image)
         # Add batch dimension
@@ -25,16 +27,42 @@ def process_image(image_bytes, prompt):
         # Normalize the image data
         image_array = image_array / 255.0
 
-        # Prepare the instances
-        instances = [
-            {
-                'image': {'content': image_bytes},
-                'text': prompt
-            }
+        # Upload the image to Gemini
+        file = client.files.upload(file=image_bytes)
+        file_uri = file.uri
+        mime_type = file.mime_type
+
+        # Prepare the content
+        contents = [
+            types.Content(
+                role="user",
+                parts=[
+                    types.Part.from_uri(
+                        file_uri=file_uri,
+                        mime_type=mime_type,
+                    ),
+                    types.Part.from_text(
+                        text=prompt
+                    ),
+                ],
+            ),
         ]
 
+        # Configure the generation settings
+        generate_content_config = types.GenerateContentConfig(
+            temperature=1,
+            top_p=0.95,
+            top_k=40,
+            max_output_tokens=8192,
+            response_mime_type="text/plain",
+        )
+
         # Generate content using the Gemini model
-        response = model.generate_content(instances=instances)
+        response = client.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=contents,
+            config=generate_content_config,
+        )
 
         return response.text
 
