@@ -10,10 +10,10 @@ from io import BytesIO
 load_dotenv()
 
 # Initialize the Gemini model with the specific version
-model = genai.GenerativeModel('gemini-1.5-flash')
-genai.configure(api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA")
+model = genai.GenerativeModel('gemini-2.0-flash')
+genai.configure(api_key='AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA')
 
-def generate_content(image_bytes, prompt):
+def process_image(image_bytes, prompt):
     try:
         # Prepare the image
         image = Image.open(BytesIO(image_bytes))
@@ -34,7 +34,7 @@ def generate_content(image_bytes, prompt):
             }
         ]
 
-        # Generate content using the Gemini Vision model
+        # Generate content using the Gemini model
         response = model.generate_content(instances=instances)
 
         return response.text[0]
@@ -56,7 +56,7 @@ if st.button('Generate'):
     if uploaded_image and user_prompt:
         with st.spinner('Generating content...'):
             image_bytes = uploaded_image.read()
-            generated_text = generate_content(image_bytes, user_prompt)
+            generated_text = process_image(image_bytes, user_prompt)
             st.subheader('Generated Content:')
             st.write(generated_text)
     else:
