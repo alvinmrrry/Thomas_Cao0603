@@ -11,7 +11,7 @@ load_dotenv()
 
 # Initialize the Gemini model with the API key
 model = genai.GenerativeModel()
-
+genai.configure(api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA")
 def generate_content(image_bytes, prompt):
     try:
         # Prepare the image
@@ -39,7 +39,7 @@ def generate_content(image_bytes, prompt):
             model='gemini-pro-vision',
             instances=instances,
             parameters=parameters,
-            api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA"
+            
         )
 
         return response.text[0]
