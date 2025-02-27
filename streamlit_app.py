@@ -36,7 +36,7 @@ def process_image(image_bytes, prompt):
         # Generate content using the Gemini model
         response = model.generate_content(instances=instances)
 
-        return response.text[0]
+        return response.text
 
     except Exception as e:
         print(f"An error occurred: {e}")
