@@ -10,7 +10,7 @@ from io import BytesIO
 load_dotenv()
 
 # Initialize the Gemini model with the API key
-model = genai.GenerativeModel(api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA")
+model = genai.GenerativeModel()
 
 def generate_content(image_bytes, prompt):
     try:
@@ -38,7 +38,8 @@ def generate_content(image_bytes, prompt):
         response = model.generate_content(
             model='gemini-pro-vision',
             instances=instances,
-            parameters=parameters
+            parameters=parameters,
+            api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA"
         )
 
         return response.text[0]
