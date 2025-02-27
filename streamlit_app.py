@@ -9,9 +9,9 @@ from io import BytesIO
 # Load environment variables
 load_dotenv()
 
-# Initialize the Gemini model with the API key
-model = genai.GenerativeModel()
-genai.configure(api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA")
+# Initialize the Gemini model with the specific version
+model = genai.GenerativeModel('gemini-1.5-flash')
+genai.Gegenai.configure(api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA")
 def generate_content(image_bytes, prompt):
     try:
         # Prepare the image
@@ -25,22 +25,16 @@ def generate_content(image_bytes, prompt):
         # Normalize the image data
         image_array = image_array / 255.0
 
-        # Prepare the instances and parameters
+        # Prepare the instances
         instances = [
             {
                 'image': {'content': image_bytes},
                 'text': prompt
             }
         ]
-        parameters = {}
 
         # Generate content using the Gemini Vision model
-        response = model.generate_content(
-            model='gemini-pro-vision',
-            instances=instances,
-            parameters=parameters,
-            
-        )
+        response = model.generate_content(instances=instances)
 
         return response.text[0]
 
