@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize the Gemini client
-model = genai.GenerativeModel(api_key='AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA')
+model = genai.GenerativeModel()
 
 # Function to generate content from Gemini vision model
 def generate_content(image_bytes, input_text):
@@ -38,7 +38,8 @@ def generate_content(image_bytes, input_text):
     response = model.generate_content(
         model="gemini-pro-vision",
         instances=instances,
-        parameters=parameters
+        parameters=parameters,
+        api_key='AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA'
     )
 
     # Extract and return the generated content
