@@ -12,3 +12,5 @@ langchain-openai
 pydantic-ai
 pydantic-ai-slim[groq]
 google-genai
+pillow 
+python-dotenv
