@@ -11,7 +11,8 @@ load_dotenv()
 
 # Initialize the Gemini model with the specific version
 model = genai.GenerativeModel('gemini-1.5-flash')
-genai.Gegenai.configure(api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA")
+genai.configure(api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA")
+
 def generate_content(image_bytes, prompt):
     try:
         # Prepare the image
