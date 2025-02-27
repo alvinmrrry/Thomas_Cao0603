@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 import streamlit as st
-from google.generativeai import Client
+import google.generativeai as genai
 from io import BytesIO
 from PIL import Image
 from dotenv import load_dotenv
@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize the Gemini client
-client = Client(api_key='AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA')
+model = genai.GenerativeModel(api_key='AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA')
 
 # Function to generate content from Gemini vision model
 def generate_content(image_bytes, input_text):
@@ -35,14 +35,14 @@ def generate_content(image_bytes, input_text):
     parameters = {}
 
     # Make the prediction request
-    response = client.predict(
+    response = model.generate_content(
         model="gemini-pro-vision",
         instances=instances,
         parameters=parameters
     )
 
     # Extract and return the generated content
-    return response.predictions[0]
+    return response.text[0]
 
 # Streamlit UI
 st.title("Google Gemini Vision Model")
