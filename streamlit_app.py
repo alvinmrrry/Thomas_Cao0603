@@ -1,70 +1,67 @@
 import os
-
 import numpy as np
 import streamlit as st
 import google.generativeai as genai
-from io import BytesIO
 from PIL import Image
 from dotenv import load_dotenv
+from io import BytesIO
 
 # Load environment variables
 load_dotenv()
 
-# Initialize the Gemini client
-model = genai.GenerativeModel()
+# Initialize the Gemini model with the API key
+model = genai.GenerativeModel(api_key="AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA")
 
-# Function to generate content from Gemini vision model
-def generate_content(image_bytes, input_text):
-    # Prepare the image
-    image = Image.open(BytesIO(image_bytes))
-    image = image.convert("RGB")
-    image = image.resize((224, 224))  # Resize to the model's expected input size
-    image = np.array(image)
-    image = np.expand_dims(image, axis=0)
-    image = image / 255.0  # Normalize the image
+def generate_content(image_bytes, prompt):
+    try:
+        # Prepare the image
+        image = Image.open(BytesIO(image_bytes))
+        image = image.convert('RGB')
+        # Resize to the model's expected input size (e.g., 224x224 or 256x256)
+        image = image.resize((224, 224))
+        image_array = np.array(image)
+        # Add batch dimension
+        image_array = np.expand_dims(image_array, axis=0)
+        # Normalize the image data
+        image_array = image_array / 255.0
 
-    # Prepare the input data
-    instances = [
-        {
-            "image": {"content": image_bytes},
-            "text": input_text
-        }
-    ]
+        # Prepare the instances and parameters
+        instances = [
+            {
+                'image': {'content': image_bytes},
+                'text': prompt
+            }
+        ]
+        parameters = {}
 
-    # Prepare the parameters
-    parameters = {}
+        # Generate content using the Gemini Vision model
+        response = model.generate_content(
+            model='gemini-pro-vision',
+            instances=instances,
+            parameters=parameters
+        )
 
-    # Make the prediction request
-    response = model.generate_content(
-        model="gemini-pro-vision",
-        instances=instances,
-        parameters=parameters,
-        api_key='AIzaSyDBvuL_-rHm8M9Vi-YOYqnbSs0Wcj3gVLA'
-    )
+        return response.text[0]
 
-    # Extract and return the generated content
-    return response.text[0]
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Error generating content. Please check the input and try again."
 
 # Streamlit UI
-st.title("Google Gemini Vision Model")
+st.title('Google Gemini Vision Model')
 
 # Image uploader
-uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+uploaded_image = st.file_uploader('Upload an image', type=['jpg', 'jpeg', 'png'])
 
-# Text input for the user to provide a prompt
-user_input = st.text_area("Enter your prompt here:")
+# Text input for the user's prompt
+user_prompt = st.text_area('Enter your prompt here:')
 
-# When the user clicks the 'Generate' button
-if st.button("Generate"):
-    if uploaded_image and user_input:
+if st.button('Generate'):
+    if uploaded_image and user_prompt:
         with st.spinner('Generating content...'):
-            # Read the image bytes
             image_bytes = uploaded_image.read()
-
-            # Generate the content
-            output = generate_content(image_bytes, user_input)
-
-            st.subheader("Generated Content:")
-            st.text(output)  # Display the generated content
+            generated_text = generate_content(image_bytes, user_prompt)
+            st.subheader('Generated Content:')
+            st.write(generated_text)
     else:
-        st.error("Please upload an image and enter a prompt before generating content.")
+        st.error('Please upload an image and enter a prompt before generating content.')
